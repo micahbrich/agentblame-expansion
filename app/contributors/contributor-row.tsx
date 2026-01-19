@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "../icons";
 import { Contributor } from "./data";
 
 interface ContributorRowProps extends Contributor {
@@ -46,20 +47,20 @@ export function ContributorRow({
         <div className="flex items-center gap-2">
           <span className="font-medium">{username}</span>
           <span
-            className="px-2 py-0.5 text-xs rounded-full font-medium"
+            className="px-2 py-0.5 text-xs rounded-full font-medium text-nowrap"
             style={{
               backgroundColor:
                 aiPercent > 50
                   ? "var(--bgColor-severe-muted)"
                   : aiPercent > 25
-                  ? "var(--bgColor-attention-muted)"
-                  : "var(--bgColor-success-muted)",
+                    ? "var(--bgColor-attention-muted)"
+                    : "var(--bgColor-success-muted)",
               color:
                 aiPercent > 50
                   ? "var(--fgColor-severe)"
                   : aiPercent > 25
-                  ? "var(--fgColor-attention)"
-                  : "var(--fgColor-success)",
+                    ? "var(--fgColor-attention)"
+                    : "var(--fgColor-success)",
             }}
           >
             {aiPercent}% AI
@@ -102,6 +103,16 @@ export function ContributorRow({
             }}
           />
         </div>
+      </div>
+
+      {/* Chevron indicator for selected */}
+      <div
+        className="hidden lg:block w-4"
+        style={{
+          color: isSelected ? "var(--fgColor-muted)" : "transparent",
+        }}
+      >
+        {Icons.chevronRight}
       </div>
     </button>
   );

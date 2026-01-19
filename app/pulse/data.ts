@@ -68,3 +68,62 @@ export const sidebarNav = [
   { label: "Network", href: "#" },
   { label: "Forks", href: "#" },
 ];
+
+// Complementary Strengths Map - where different team members excel
+export const strengths = {
+  areas: ["Tests", "APIs", "UI", "Logic"],
+  contributors: [
+    { name: "alice", scores: [4, 3, 2, 1] }, // ●●●●, ●●●, ●●, ●
+    { name: "bob", scores: [2, 4, 3, 3] },
+    { name: "carol", scores: [3, 2, 4, 2] },
+    { name: "dave", scores: [2, 2, 2, 4] },
+  ],
+  insight:
+    "Different strengths, not better/worse. alice → tests, bob → APIs, carol → UI, dave → logic",
+};
+
+// Collective Intelligence Map - team-aggregated AI success zones
+export const intelligence = {
+  high: [
+    { area: "Tests", survivability: 92 },
+    { area: "Utilities", survivability: 88 },
+    { area: "Components", survivability: 85 },
+  ],
+  caution: [
+    { area: "Business logic", survivability: 62 },
+    { area: "Auth flows", survivability: 58 },
+    { area: "Payments", survivability: 54 },
+  ],
+  meta: {
+    contributors: 4,
+    days: 90,
+  },
+};
+
+// AI Cost Breakdown - estimated spend using models.dev pricing
+export const costs = {
+  byModel: [
+    { model: "claude-4-opus", spend: 847, inputCost: 15, lines: 2100 },
+    { model: "claude-3.5-sonnet", spend: 234, inputCost: 3, lines: 1800 },
+    { model: "gpt-4o", spend: 156, inputCost: 2.5, lines: 1200 },
+  ],
+  total: 1237,
+  efficiency: {
+    costPerSurviving: 0.12,
+    costPerReverted: 0.31,
+  },
+  insight:
+    "opus is 3x the cost but only 9% better survival. Consider sonnet for routine tasks.",
+};
+
+// Review Workload Distribution - who reviews AI-heavy PRs
+export const reviews = {
+  reviewers: [
+    { name: "alice", human: 12, ai: 28 },
+    { name: "bob", human: 25, ai: 8 },
+    { name: "carol", human: 18, ai: 22 },
+    { name: "dave", human: 15, ai: 12 },
+  ],
+  warning: "alice reviewing 3.5x more AI PRs than bob",
+  insight: "Consider balancing review assignments",
+};
