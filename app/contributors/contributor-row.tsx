@@ -1,12 +1,8 @@
 "use client";
 
-interface ContributorRowProps {
-  username: string;
-  avatar: string;
-  additions: number;
-  deletions: number;
-  aiPercent: number;
-  commits: number;
+import { Contributor } from "./data";
+
+interface ContributorRowProps extends Contributor {
   isSelected?: boolean;
   onClick?: () => void;
 }
@@ -22,7 +18,7 @@ export function ContributorRow({
   onClick,
 }: ContributorRowProps) {
   const total = additions + deletions;
-  const maxBar = 2000; // Normalize bar width
+  const maxBar = 2000;
   const barWidth = Math.min((total / maxBar) * 100, 100);
   const additionWidth = (additions / total) * 100;
 
@@ -69,10 +65,7 @@ export function ContributorRow({
             {aiPercent}% AI
           </span>
         </div>
-        <div
-          className="text-xs mt-0.5"
-          style={{ color: "var(--fgColor-muted)" }}
-        >
+        <div className="text-xs mt-0.5" style={{ color: "var(--fgColor-muted)" }}>
           {commits} commits
         </div>
       </div>

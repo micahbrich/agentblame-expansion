@@ -1,17 +1,6 @@
-"use client";
+// GitHub Octicons as React components
 
-import Link from "next/link";
-
-interface GitHubShellProps {
-  children: React.ReactNode;
-  repo?: string;
-  stars?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tabs?: any[];
-}
-
-// Octicons SVG components
-const Icons = {
+export const Icons = {
   hamburger: (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
       <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z" />
@@ -129,6 +118,11 @@ const Icons = {
       <path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z" />
     </svg>
   ),
+  chevronRight: (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M6.22 3.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L9.94 8 6.22 4.28a.75.75 0 0 1 0-1.06Z" />
+    </svg>
+  ),
   sidebar: (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
       <path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25ZM1.75 2.5a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h3.5v-11ZM6.75 2.5v11h7.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25Z" />
@@ -160,169 +154,24 @@ const Icons = {
       <path d="M6 8.825c-.2 0-.4-.1-.5-.2L3.3 6.4a.8.8 0 0 1 0-1.1c.3-.3.8-.3 1.1 0L6 6.85l1.6-1.6c.3-.3.8-.3 1.1 0s.3.8 0 1.1l-2.2 2.2c-.1.2-.3.275-.5.275Z" />
     </svg>
   ),
+  warning: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+    </svg>
+  ),
+  flame: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M7.998 14.5c2.832 0 5-1.98 5-4.5 0-1.463-.68-2.19-1.879-3.383l-.036-.037c-1.013-1.008-2.3-2.29-2.834-4.434-.322.256-.63.579-.864.953-.432.696-.621 1.58-.046 2.73.473.947.67 2.284-.278 3.232-.61.61-1.545.84-2.403.633a2.79 2.79 0 0 1-1.436-.874A3.198 3.198 0 0 0 3 10c0 2.53 2.164 4.5 4.998 4.5ZM9.533.753C9.496.34 9.16.009 8.77.146 7.035.75 4.34 3.187 5.997 6.5c.344.689.285 1.218.003 1.5-.419.419-1.796.167-2.31-.188-.872-.604-2.53.074-2.683 1.114A4.702 4.702 0 0 0 1 9.5c0 3.25 2.797 6 6.998 6 4.19 0 7-2.79 7-6C15 6.816 12.61 3.969 9.533.753Z" />
+    </svg>
+  ),
+  trophy: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8.834.066c.763.087 1.5.295 2.01.884.505.581.656 1.378.656 2.3 0 .467-.087 1.119-.157 1.637L11.328 5h1.422c.603 0 1.174.085 1.668.333.508.254.911.679 1.137 1.2.453.103.757.441.757.92 0 .317-.162.616-.41.7.084.1.154.207.205.328.3.725-.04 1.397-.596 1.893.052.244.073.503.073.75 0 .648-.216 1.276-.756 1.708-.473.38-1.104.553-1.79.553-.36 0-.736-.06-1.108-.162H9.5a6.26 6.26 0 0 0-.723.255A5.86 5.86 0 0 0 7.36 14a.75.75 0 0 1-.64-.64A5.86 5.86 0 0 0 6.216 12a6.26 6.26 0 0 0-.723-.255H3.036a3.065 3.065 0 0 1-1.108.162c-.686 0-1.317-.173-1.79-.553C.598 10.974.382 10.346.382 9.7c0-.247.021-.506.073-.75-.556-.496-.896-1.168-.596-1.893.05-.121.12-.228.205-.328A.814.814 0 0 1 0 6.249c0-.479.304-.817.757-.92.226-.52.629-.946 1.137-1.2.494-.248 1.066-.333 1.669-.333h1.422l-.015-.113C4.88 3.119 4.793 2.467 4.793 2c0-.922.15-1.719.656-2.3.51-.589 1.247-.797 2.01-.884A6.016 6.016 0 0 1 8.5.008c.276.003.549.02.834.058ZM5.043 3.91c.066.364.132.775.201 1.227.08.53.147.973.26 1.356a2.269 2.269 0 0 0 .628 1.004c.368.342.87.522 1.504.522h.728c.635 0 1.136-.18 1.504-.522a2.27 2.27 0 0 0 .628-1.004c.113-.383.18-.825.26-1.356.069-.452.135-.863.201-1.227.024-.13.042-.252.055-.367a8.53 8.53 0 0 0-.007-1.095c-.047-.485-.167-.845-.377-1.086-.204-.235-.516-.375-1.065-.432A4.516 4.516 0 0 0 8.5 1.508c-.178 0-.376.01-.563.035-.549.057-.86.197-1.065.432-.21.241-.33.601-.377 1.086a8.528 8.528 0 0 0-.007 1.095c.013.115.031.237.055.367Z" />
+    </svg>
+  ),
+  people: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M2 5.5a3.5 3.5 0 1 1 5.898 2.549 5.508 5.508 0 0 1 3.034 4.084.75.75 0 1 1-1.482.235 4 4 0 0 0-7.9 0 .75.75 0 0 1-1.482-.236A5.507 5.507 0 0 1 3.102 8.05 3.493 3.493 0 0 1 2 5.5ZM11 4a3.001 3.001 0 0 1 2.22 5.018 5.01 5.01 0 0 1 2.56 3.012.749.749 0 0 1-.885.954.752.752 0 0 1-.549-.514 3.507 3.507 0 0 0-2.522-2.372.75.75 0 0 1-.574-.73v-.352a.75.75 0 0 1 .416-.672A1.5 1.5 0 0 0 11 5.5.75.75 0 0 1 11 4Zm-5.5-.5a2 2 0 1 0-.001 3.999A2 2 0 0 0 5.5 3.5Z" />
+    </svg>
+  ),
 };
-
-// Export Icons for use in other components
-export { Icons };
-
-export function GitHubShell({
-  children,
-  repo = "mesa-dot-dev/agentblame",
-  stars = 39,
-}: GitHubShellProps) {
-  const [owner, repoName] = repo.split("/");
-
-  return (
-    <div
-      className="min-h-screen"
-      style={{
-        backgroundColor: "var(--bgColor-default)",
-        color: "var(--fgColor-default)",
-      }}
-    >
-      {/* GitHub Header - dark background */}
-      <header
-        className="px-4 h-16 flex items-center justify-between"
-        style={{ backgroundColor: "#010409" }}
-      >
-        {/* Left side */}
-        <div className="flex items-center gap-4">
-          {/* Hamburger menu */}
-          <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#f0f6fc" }}>
-            {Icons.hamburger}
-          </button>
-
-          {/* GitHub Logo */}
-          <Link href="/" style={{ color: "#f0f6fc" }}>
-            {Icons.logo}
-          </Link>
-
-          {/* Repo path */}
-          <div className="flex items-center gap-1 text-sm">
-            <Link href="/" className="font-semibold hover:underline" style={{ color: "#f0f6fc" }}>
-              {owner}
-            </Link>
-            <span style={{ color: "#848d97" }}>/</span>
-            <Link href="/" className="font-semibold hover:underline" style={{ color: "#f0f6fc" }}>
-              {repoName}
-            </Link>
-          </div>
-
-          {/* Stars button */}
-          <div className="flex items-center border rounded-md text-xs" style={{ borderColor: "#30363d" }}>
-            <button className="flex items-center gap-1 px-2 py-1 hover:bg-[#21262d]" style={{ color: "#c9d1d9" }}>
-              {Icons.star}
-              <span>Star</span>
-            </button>
-            <span className="px-2 py-1 border-l" style={{ borderColor: "#30363d", color: "#c9d1d9" }}>
-              {stars}
-            </span>
-          </div>
-        </div>
-
-        {/* Right side */}
-        <div className="flex items-center gap-2">
-          {/* Search bar */}
-          <div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-md border text-sm w-72"
-            style={{
-              backgroundColor: "#010409",
-              borderColor: "#30363d",
-              color: "#848d97",
-            }}
-          >
-            {Icons.search}
-            <span className="flex-1">Type / to search</span>
-            <span className="text-xs px-1 border rounded" style={{ borderColor: "#30363d" }}>/</span>
-          </div>
-
-          {/* Divider */}
-          <div className="h-6 w-px mx-1" style={{ backgroundColor: "#21262d" }} />
-
-          {/* Header icons */}
-          <div className="flex items-center gap-1">
-            {/* Terminal icon */}
-            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
-              {Icons.terminal}
-            </button>
-            {/* Copilot icon */}
-            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
-              {Icons.copilot}
-            </button>
-            {/* Plus dropdown */}
-            <button className="flex items-center p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#f0f6fc" }}>
-              {Icons.plus}
-              {Icons.triangle}
-            </button>
-            {/* Issues */}
-            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
-              {Icons.issue}
-            </button>
-            {/* PRs */}
-            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
-              {Icons.pr}
-            </button>
-            {/* Notifications */}
-            <button className="p-2 rounded-md hover:bg-[#21262d] relative" style={{ color: "#f0f6fc" }}>
-              {Icons.bell}
-              {/* Blue notification dot */}
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: "#388bfd" }} />
-            </button>
-            {/* Avatar */}
-            <button className="ml-1">
-              <div className="w-8 h-8 rounded-full overflow-hidden border-2" style={{ borderColor: "#30363d" }}>
-                <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="avatar" className="w-full h-full" />
-              </div>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* Repo nav - same dark background as header */}
-      <nav className="px-4 border-b" style={{ backgroundColor: "#010409", borderColor: "#21262d" }}>
-        <ul className="flex gap-0 text-sm">
-          {[
-            { icon: Icons.code, label: "Code", href: "/" },
-            { icon: Icons.issue, label: "Issues", href: "/", count: 1 },
-            { icon: Icons.pr, label: "Pull requests", href: "/pr", active: true },
-            { icon: Icons.actions, label: "Actions", href: "/" },
-            { icon: Icons.models, label: "Models", href: "/" },
-            { icon: Icons.insights, label: "Insights", href: "/pulse" },
-            { icon: Icons.release, label: "Releases", href: "/", count: 1 },
-          ].map((item) => (
-            <li key={item.label}>
-              <Link
-                href={item.href}
-                className="flex items-center gap-2 px-4 py-3 border-b-2 transition-colors"
-                style={{
-                  color: "#f0f6fc",
-                  fontWeight: item.active ? 600 : 400,
-                  borderColor: item.active ? "#f78166" : "transparent",
-                }}
-              >
-                <span style={{ color: "#848d97" }}>{item.icon}</span>
-                {item.label}
-                {item.count !== undefined && (
-                  <span
-                    className="px-1.5 py-0.5 text-xs rounded-full"
-                    style={{ backgroundColor: "#30363d", color: "#c9d1d9" }}
-                  >
-                    {item.count}
-                  </span>
-                )}
-              </Link>
-            </li>
-          ))}
-          <li className="ml-auto">
-            <button className="flex items-center gap-2 px-4 py-3" style={{ color: "#848d97" }}>
-              {Icons.more}
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Main content */}
-      <main>{children}</main>
-    </div>
-  );
-}
