@@ -136,3 +136,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Shiki syntax highlighting - dark mode support */
+[data-color-mode="dark"] .shiki,
+[data-color-mode="dark"] .shiki span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
