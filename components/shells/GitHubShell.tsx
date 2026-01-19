@@ -287,6 +287,7 @@ export function GitHubShell({
             { icon: Icons.pr, label: "Pull requests", href: "/pr", active: true },
             { icon: Icons.actions, label: "Actions", href: "/" },
             { icon: Icons.models, label: "Models", href: "/" },
+            { icon: Icons.insights, label: "Insights", href: "/pulse" },
             { icon: Icons.release, label: "Releases", href: "/", count: 1 },
           ].map((item) => (
             <li key={item.label}>

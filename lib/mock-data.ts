@@ -4,10 +4,12 @@ export const mockPR = {
   number: 47,
   title: "feat: Add AI-powered code review suggestions",
   author: "alice",
-  stats: { ai: 18, human: 17, percent: 51 },
+  stats: { ai: 187, human: 132, percent: 59 },
+  additions: 319,
+  deletions: 121,
   providers: [
-    { name: "Cursor", model: "claude-4-opus", lines: 12, percent: 67 },
-    { name: "Claude Code", model: "claude-3.5-sonnet", lines: 6, percent: 33 },
+    { name: "Cursor", model: "claude-4-opus", lines: 124, percent: 67 },
+    { name: "Claude Code", model: "claude-3.5-sonnet", lines: 63, percent: 33 },
   ],
   securityFiles: [
     { path: "src/auth/oauth.ts", aiPercent: 78 },
@@ -22,6 +24,20 @@ export const mockPR = {
         "src/api/products.ts:55-60",
       ],
     },
+  ],
+  // 11 files changed - includes security files and duplicate source files
+  files: [
+    { path: "src/api/users.ts", additions: 26, deletions: 4, aiPercent: 67, provider: "Cursor", model: "claude-4-opus" },
+    { path: "src/api/orders.ts", additions: 31, deletions: 8, aiPercent: 72, provider: "Cursor", model: "claude-4-opus" },
+    { path: "src/api/products.ts", additions: 28, deletions: 5, aiPercent: 58, provider: "Claude Code", model: "claude-3.5-sonnet" },
+    { path: "src/auth/oauth.ts", additions: 45, deletions: 12, aiPercent: 78, provider: "Cursor", model: "claude-4-opus", security: true },
+    { path: "src/payments/stripe.ts", additions: 38, deletions: 15, aiPercent: 45, provider: "Claude Code", model: "claude-3.5-sonnet", security: true },
+    { path: "src/utils/validation.ts", additions: 22, deletions: 6, aiPercent: 82, provider: "Cursor", model: "claude-4-opus" },
+    { path: "src/utils/formatting.ts", additions: 18, deletions: 3, aiPercent: 55, provider: "Claude Code", model: "claude-3.5-sonnet" },
+    { path: "src/components/ReviewPanel.tsx", additions: 52, deletions: 28, aiPercent: 61, provider: "Cursor", model: "claude-4-opus" },
+    { path: "src/components/SuggestionCard.tsx", additions: 34, deletions: 19, aiPercent: 48, provider: "Claude Code", model: "claude-3.5-sonnet" },
+    { path: "src/hooks/useReviewSuggestions.ts", additions: 19, deletions: 14, aiPercent: 63, provider: "Cursor", model: "claude-4-opus" },
+    { path: "README.md", additions: 6, deletions: 7, aiPercent: 0 },
   ],
 };
 
