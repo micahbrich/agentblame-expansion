@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# agentblame design mockups
 
-## Getting Started
+Design exercise exploring expanded views for [mesa-dot-dev/agentblame](https://github.com/mesa-dot-dev/agentblame) — a Chrome extension that surfaces AI-generated code attribution on GitHub PRs.
 
-First, run the development server:
+## What This Is
+
+Static mockups that visualize how agentblame could expand beyond PR summaries into GitHub's Insights pages. Three views:
+
+### `/pr` — Pull Request Summary
+
+Expands the existing PR summary banner with:
+- AI vs human line attribution
+- Provider/model breakdown (Cursor, Claude Code, etc.)
+- Security-sensitive file alerts
+- Duplicate code detection
+- Complexity hotspots
+- Convention drift warnings
+- Error handling review flags
+
+### `/pulse` — Repository Insights
+
+Injects into GitHub's Pulse page:
+- AI adoption trends over time
+- Tool usage breakdown by provider
+- Repo-wide AI contribution stats
+
+### `/contributors` — Personal AI Fingerprint
+
+Per-contributor view showing:
+- AI usage badges per developer
+- Activity heatmap (when AI code was written)
+- Code quality metrics
+- Survivability panel (how much AI code persists vs gets modified/deleted)
+
+## Design Philosophy
+
+**Actionable insights, not surveillance.**
+
+- Consider AI contributions as a positive, not something to fear
+- Aggregate repo trends, not individual performance metrics
+- Focus on code health signals over "AI usage scores"
+
+## Running
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [localhost:3000](http://localhost:3000).
