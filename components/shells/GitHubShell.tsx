@@ -1,27 +1,176 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import Link from "next/link";
 
 interface GitHubShellProps {
   children: React.ReactNode;
   repo?: string;
-  title?: string;
-  tabs?: Array<{
-    label: string;
-    href: string;
-    active?: boolean;
-    count?: number;
-  }>;
+  stars?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tabs?: any[];
 }
+
+// Octicons SVG components
+const Icons = {
+  hamburger: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75ZM1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Z" />
+    </svg>
+  ),
+  logo: (
+    <svg height="32" viewBox="0 0 16 16" width="32" fill="currentColor">
+      <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
+    </svg>
+  ),
+  star: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z" />
+    </svg>
+  ),
+  code: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z" />
+    </svg>
+  ),
+  issue: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+      <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z" />
+    </svg>
+  ),
+  pr: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354ZM3.75 2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm0 9.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Zm8.25.75a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z" />
+    </svg>
+  ),
+  actions: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z" />
+    </svg>
+  ),
+  insights: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1.5 1.75V13.5h13.75a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75V1.75a.75.75 0 0 1 1.5 0Zm14.28 2.53-5.25 5.25a.75.75 0 0 1-1.06 0L7 7.06 4.28 9.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.25-3.25a.75.75 0 0 1 1.06 0L10 7.94l4.72-4.72a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z" />
+    </svg>
+  ),
+  search: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z" />
+    </svg>
+  ),
+  bell: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z" />
+    </svg>
+  ),
+  plus: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M7.75 2a.75.75 0 0 1 .75.75V7h4.25a.75.75 0 0 1 0 1.5H8.5v4.25a.75.75 0 0 1-1.5 0V8.5H2.75a.75.75 0 0 1 0-1.5H7V2.75A.75.75 0 0 1 7.75 2Z" />
+    </svg>
+  ),
+  triangle: (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+      <path d="m4.427 7.427 3.396 3.396a.25.25 0 0 0 .354 0l3.396-3.396A.25.25 0 0 0 11.396 7H4.604a.25.25 0 0 0-.177.427Z" />
+    </svg>
+  ),
+  more: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM1.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+    </svg>
+  ),
+  terminal: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.75-.25a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25ZM7.25 8a.749.749 0 0 1-.22.53l-2.25 2.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L5.44 8 3.72 6.28a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l2.25 2.25c.141.14.22.331.22.53Zm1.5 1.5h3a.75.75 0 0 1 0 1.5h-3a.75.75 0 0 1 0-1.5Z" />
+    </svg>
+  ),
+  copilot: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M7.998 15.035c-4.562 0-7.873-2.914-7.998-3.749V9.338c.085-.628.677-1.686 1.588-2.065.013-.07.024-.143.036-.218.029-.183.06-.384.126-.612-.201-.508-.254-1.084-.254-1.656 0-.87.128-1.769.693-2.484C2.875 1.254 3.898.692 5.022.692c.338 0 .67.051.996.142a3.537 3.537 0 0 1 1.98-.142c.311-.09.643-.142.98-.142 1.124 0 2.147.562 2.833 1.611.565.715.693 1.614.693 2.484 0 .572-.053 1.148-.254 1.656.066.228.097.429.126.612.012.076.024.148.037.218.924.385 1.52 1.471 1.59 2.095v1.949c-.125.835-3.436 3.749-7.998 3.749l-.007.001ZM1.525 9.375v1.556c.208.254 2.841 2.574 6.477 2.574 3.64 0 6.274-2.32 6.48-2.574V9.375c-.182-.504-1.023-1.381-2.016-1.536a1.02 1.02 0 0 1-.516-.238 1.02 1.02 0 0 1-.278-.4 6.082 6.082 0 0 1-.052-.092l-.049-.1-.05-.101a4.181 4.181 0 0 1-.167-.39c.022-.886.376-1.669.552-2.128.017-.044.033-.085.045-.122.023-.064.038-.118.046-.167.016-.093.017-.18.017-.27 0-.53-.074-1.176-.405-1.597-.358-.454-.97-.847-1.763-.847-.246 0-.518.051-.803.157l-.298.11-.318-.06a2.007 2.007 0 0 0-1.973 0l-.318.06-.298-.11a1.841 1.841 0 0 0-.804-.157c-.79 0-1.403.393-1.762.847-.331.421-.405 1.068-.405 1.598 0 .09 0 .176.017.269.008.05.023.103.046.167.012.037.028.078.045.122.176.46.53 1.242.552 2.128a4.18 4.18 0 0 1-.168.39l-.048.1-.05.101-.051.092a1.02 1.02 0 0 1-.795.638c-.994.155-1.833 1.032-2.016 1.536Z" />
+      <path d="M11.5 10.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm-5 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+    </svg>
+  ),
+  models: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8.5 1.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 1.5 0Zm5.531 1.969a.75.75 0 0 1 0 1.062L13 5.812a.75.75 0 0 1-1.062-1.062l1.031-1.031a.75.75 0 0 1 1.062 0ZM14.25 7.5h-1.5a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5ZM13 10.188l1.031 1.031a.75.75 0 1 1-1.062 1.062L11.938 11.25a.75.75 0 1 1 1.062-1.062ZM8.5 12.75v1.5a.75.75 0 0 1-1.5 0v-1.5a.75.75 0 0 1 1.5 0ZM4.812 13a.75.75 0 0 1-1.062 0L2.719 11.969a.75.75 0 0 1 1.062-1.062L4.812 11.938a.75.75 0 0 1 0 1.062ZM3.25 7.5h-1.5a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5ZM4.062 4.75 3.031 3.719a.75.75 0 0 1 1.062-1.062L5.125 3.688a.75.75 0 1 1-1.063 1.062ZM8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM5 8a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z" />
+    </svg>
+  ),
+  release: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z" />
+    </svg>
+  ),
+  merge: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0 0 .005V3.25Z" />
+    </svg>
+  ),
+  comment: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1 2.75C1 1.784 1.784 1 2.75 1h10.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 13.25 12H9.06l-2.573 2.573A1.458 1.458 0 0 1 4 13.543V12H2.75A1.75 1.75 0 0 1 1 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h4.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+    </svg>
+  ),
+  commit: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5Zm-1.43-.75a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z" />
+    </svg>
+  ),
+  check: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z" />
+    </svg>
+  ),
+  file: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z" />
+    </svg>
+  ),
+  chevron: (
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M12.78 5.22a.749.749 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.06 0L3.22 6.28a.749.749 0 1 1 1.06-1.06L8 8.939l3.72-3.719a.749.749 0 0 1 1.06 0Z" />
+    </svg>
+  ),
+  sidebar: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25ZM1.75 2.5a.25.25 0 0 0-.25.25v10.5c0 .138.112.25.25.25h3.5v-11ZM6.75 2.5v11h7.5a.25.25 0 0 0 .25-.25V2.75a.25.25 0 0 0-.25-.25Z" />
+    </svg>
+  ),
+  gear: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M8 0a8.2 8.2 0 0 1 .701.031C9.444.095 9.99.645 10.16 1.29l.288 1.107c.018.066.079.158.212.224.231.114.454.243.668.386.123.082.233.09.299.071l1.103-.303c.644-.176 1.392.021 1.82.63.27.385.506.792.704 1.218.315.675.111 1.422-.364 1.891l-.814.806c-.049.048-.098.147-.088.294.016.257.016.515 0 .772-.01.147.04.246.088.294l.814.806c.475.469.679 1.216.364 1.891a7.977 7.977 0 0 1-.704 1.217c-.428.61-1.176.807-1.82.63l-1.103-.303c-.066-.019-.176-.011-.299.071a5.909 5.909 0 0 1-.668.386c-.133.066-.194.158-.211.224l-.29 1.106c-.168.646-.715 1.196-1.458 1.26a8.006 8.006 0 0 1-1.402 0c-.743-.064-1.289-.614-1.458-1.26l-.289-1.106c-.018-.066-.079-.158-.212-.224a5.738 5.738 0 0 1-.668-.386c-.123-.082-.233-.09-.299-.071l-1.103.303c-.644.176-1.392-.021-1.82-.63a8.12 8.12 0 0 1-.704-1.218c-.315-.675-.111-1.422.363-1.891l.815-.806c.049-.048.098-.147.088-.294a6.214 6.214 0 0 1 0-.772c.01-.147-.04-.246-.088-.294l-.815-.806C.635 6.045.431 5.298.746 4.623a7.92 7.92 0 0 1 .704-1.217c.428-.61 1.176-.807 1.82-.63l1.103.303c.066.019.176.011.299-.071.214-.143.437-.272.668-.386.133-.066.194-.158.211-.224l.29-1.106C6.009.645 6.556.095 7.299.03 7.53.01 7.764 0 8 0Zm-.571 1.525c-.036.003-.108.036-.137.146l-.289 1.105c-.147.561-.549.967-.998 1.189-.173.086-.34.183-.5.29-.417.278-.97.423-1.529.27l-1.103-.303c-.109-.03-.175.016-.195.045-.22.312-.412.644-.573.99-.014.031-.021.11.059.19l.815.806c.411.406.562.957.53 1.456a4.709 4.709 0 0 0 0 .582c.032.499-.119 1.05-.53 1.456l-.815.806c-.08.08-.073.159-.059.19.162.346.353.677.573.989.02.03.085.076.195.046l1.103-.303c.559-.153 1.112-.008 1.528.27.161.107.328.204.501.29.449.222.851.628.998 1.189l.289 1.105c.029.109.101.143.137.146a6.6 6.6 0 0 0 1.142 0c.036-.003.108-.036.137-.146l.289-1.105c.147-.561.549-.967.998-1.189.173-.086.34-.183.5-.29.417-.278.97-.423 1.529-.27l1.103.303c.109.029.175-.016.195-.045.22-.313.411-.644.573-.99.014-.031.021-.11-.059-.19l-.815-.806c-.411-.406-.562-.957-.53-1.456a4.709 4.709 0 0 0 0-.582c-.032-.499.119-1.05.53-1.456l.815-.806c.08-.08.073-.159.059-.19a6.464 6.464 0 0 0-.573-.989c-.02-.03-.085-.076-.195-.046l-1.103.303c-.559.153-1.112.008-1.528-.27a4.44 4.44 0 0 0-.501-.29c-.449-.222-.851-.628-.998-1.189l-.289-1.105c-.029-.11-.101-.143-.137-.146a6.6 6.6 0 0 0-1.142 0ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9.5 8a1.5 1.5 0 1 0-3.001.001A1.5 1.5 0 0 0 9.5 8Z" />
+    </svg>
+  ),
+  copy: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+      <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+    </svg>
+  ),
+  expand: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="m8.177.677 2.896 2.896a.25.25 0 0 1-.177.427H8.75v1.25a.75.75 0 0 1-1.5 0V4H5.104a.25.25 0 0 1-.177-.427L7.823.677a.25.25 0 0 1 .354 0ZM7.25 10.75a.75.75 0 0 1 1.5 0V12h2.146a.25.25 0 0 1 .177.427l-2.896 2.896a.25.25 0 0 1-.354 0l-2.896-2.896A.25.25 0 0 1 5.104 12H7.25v-1.25Zm-5-2a.75.75 0 0 0 0-1.5h-.5a.75.75 0 0 0 0 1.5h.5ZM6 8a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1 0-1.5h.5A.75.75 0 0 1 6 8Zm2.25.75a.75.75 0 0 0 0-1.5h-.5a.75.75 0 0 0 0 1.5h.5ZM12 8a.75.75 0 0 1-.75.75h-.5a.75.75 0 0 1 0-1.5h.5A.75.75 0 0 1 12 8Zm2.25.75a.75.75 0 0 0 0-1.5h-.5a.75.75 0 0 0 0 1.5h.5Z" />
+    </svg>
+  ),
+  folder: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z" />
+    </svg>
+  ),
+  folderOpen: (
+    <svg width="16" height="16" viewBox="0 0 12 12" fill="currentColor">
+      <path d="M6 8.825c-.2 0-.4-.1-.5-.2L3.3 6.4a.8.8 0 0 1 0-1.1c.3-.3.8-.3 1.1 0L6 6.85l1.6-1.6c.3-.3.8-.3 1.1 0s.3.8 0 1.1l-2.2 2.2c-.1.2-.3.275-.5.275Z" />
+    </svg>
+  ),
+};
+
+// Export Icons for use in other components
+export { Icons };
 
 export function GitHubShell({
   children,
   repo = "mesa-dot-dev/agentblame",
-  title,
-  tabs,
+  stars = 39,
 }: GitHubShellProps) {
-  const { theme, setTheme } = useTheme();
+  const [owner, repoName] = repo.split("/");
 
   return (
     <div
@@ -31,111 +180,131 @@ export function GitHubShell({
         color: "var(--fgColor-default)",
       }}
     >
-      {/* GitHub Header */}
+      {/* GitHub Header - dark background */}
       <header
-        className="px-4 py-3 flex items-center justify-between border-b"
-        style={{
-          backgroundColor: "var(--header-bgColor)",
-          borderColor: "var(--borderColor-muted)",
-        }}
+        className="px-4 h-16 flex items-center justify-between"
+        style={{ backgroundColor: "#010409" }}
       >
+        {/* Left side */}
         <div className="flex items-center gap-4">
+          {/* Hamburger menu */}
+          <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#f0f6fc" }}>
+            {Icons.hamburger}
+          </button>
+
           {/* GitHub Logo */}
-          <svg
-            height="32"
-            viewBox="0 0 16 16"
-            width="32"
-            style={{ fill: "var(--header-fgColor-logo)" }}
-          >
-            <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
-          </svg>
+          <Link href="/" style={{ color: "#f0f6fc" }}>
+            {Icons.logo}
+          </Link>
 
           {/* Repo path */}
-          <div className="flex items-center gap-1 text-sm font-semibold">
-            <Link
-              href="/"
-              className="hover:underline"
-              style={{ color: "var(--header-fgColor-default)" }}
-            >
-              {repo.split("/")[0]}
+          <div className="flex items-center gap-1 text-sm">
+            <Link href="/" className="font-semibold hover:underline" style={{ color: "#f0f6fc" }}>
+              {owner}
             </Link>
-            <span style={{ color: "var(--header-fgColor-muted)" }}>/</span>
-            <Link
-              href="/"
-              className="hover:underline"
-              style={{ color: "var(--header-fgColor-default)" }}
-            >
-              {repo.split("/")[1]}
+            <span style={{ color: "#848d97" }}>/</span>
+            <Link href="/" className="font-semibold hover:underline" style={{ color: "#f0f6fc" }}>
+              {repoName}
             </Link>
+          </div>
+
+          {/* Stars button */}
+          <div className="flex items-center border rounded-md text-xs" style={{ borderColor: "#30363d" }}>
+            <button className="flex items-center gap-1 px-2 py-1 hover:bg-[#21262d]" style={{ color: "#c9d1d9" }}>
+              {Icons.star}
+              <span>Star</span>
+            </button>
+            <span className="px-2 py-1 border-l" style={{ borderColor: "#30363d", color: "#c9d1d9" }}>
+              {stars}
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          {/* Theme toggle */}
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-md hover:opacity-80"
-            style={{ color: "var(--header-fgColor-default)" }}
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          {/* Search bar */}
+          <div
+            className="flex items-center gap-2 px-3 py-1.5 rounded-md border text-sm w-72"
+            style={{
+              backgroundColor: "#010409",
+              borderColor: "#30363d",
+              color: "#848d97",
+            }}
           >
-            {theme === "dark" ? (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-              >
-                <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm0 1.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11ZM8 0a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0V.75A.75.75 0 0 1 8 0Zm0 13a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 8 13ZM2.343 2.343a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061Zm9.193 9.193a.75.75 0 0 1 1.06 0l1.061 1.06a.75.75 0 0 1-1.06 1.061l-1.061-1.06a.75.75 0 0 1 0-1.061ZM0 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 8Zm13 0a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 13 8ZM2.343 13.657a.75.75 0 0 1 0-1.061l1.061-1.06a.75.75 0 0 1 1.06 1.06l-1.06 1.061a.75.75 0 0 1-1.061 0Zm9.193-9.193a.75.75 0 0 1 0-1.06l1.061-1.061a.75.75 0 0 1 1.06 1.06l-1.06 1.061a.75.75 0 0 1-1.061 0Z" />
-              </svg>
-            ) : (
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-              >
-                <path d="M9.598 1.591a.749.749 0 0 1 .785-.175 7.001 7.001 0 1 1-8.967 8.967.75.75 0 0 1 .961-.96 5.5 5.5 0 0 0 7.046-7.046.75.75 0 0 1 .175-.786Zm1.616 1.945a7 7 0 0 1-7.678 7.678 5.499 5.499 0 1 0 7.678-7.678Z" />
-              </svg>
-            )}
-          </button>
+            {Icons.search}
+            <span className="flex-1">Type / to search</span>
+            <span className="text-xs px-1 border rounded" style={{ borderColor: "#30363d" }}>/</span>
+          </div>
+
+          {/* Divider */}
+          <div className="h-6 w-px mx-1" style={{ backgroundColor: "#21262d" }} />
+
+          {/* Header icons */}
+          <div className="flex items-center gap-1">
+            {/* Terminal icon */}
+            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
+              {Icons.terminal}
+            </button>
+            {/* Copilot icon */}
+            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
+              {Icons.copilot}
+            </button>
+            {/* Plus dropdown */}
+            <button className="flex items-center p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#f0f6fc" }}>
+              {Icons.plus}
+              {Icons.triangle}
+            </button>
+            {/* Issues */}
+            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
+              {Icons.issue}
+            </button>
+            {/* PRs */}
+            <button className="p-2 rounded-md hover:bg-[#21262d]" style={{ color: "#848d97" }}>
+              {Icons.pr}
+            </button>
+            {/* Notifications */}
+            <button className="p-2 rounded-md hover:bg-[#21262d] relative" style={{ color: "#f0f6fc" }}>
+              {Icons.bell}
+              {/* Blue notification dot */}
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: "#388bfd" }} />
+            </button>
+            {/* Avatar */}
+            <button className="ml-1">
+              <div className="w-8 h-8 rounded-full overflow-hidden border-2" style={{ borderColor: "#30363d" }}>
+                <img src="https://avatars.githubusercontent.com/u/1?v=4" alt="avatar" className="w-full h-full" />
+              </div>
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Repo nav */}
-      <nav
-        className="px-4 border-b"
-        style={{ borderColor: "var(--borderColor-muted)" }}
-      >
-        <ul className="flex gap-4 text-sm">
+      {/* Repo nav - same dark background as header */}
+      <nav className="px-4 border-b" style={{ backgroundColor: "#010409", borderColor: "#21262d" }}>
+        <ul className="flex gap-0 text-sm">
           {[
-            { label: "Code", href: "/" },
-            { label: "Issues", href: "/", count: 3 },
-            { label: "Pull requests", href: "/pr", count: 2 },
-            { label: "Actions", href: "/" },
-            { label: "Insights", href: "/pulse" },
+            { icon: Icons.code, label: "Code", href: "/" },
+            { icon: Icons.issue, label: "Issues", href: "/", count: 1 },
+            { icon: Icons.pr, label: "Pull requests", href: "/pr", active: true },
+            { icon: Icons.actions, label: "Actions", href: "/" },
+            { icon: Icons.models, label: "Models", href: "/" },
+            { icon: Icons.release, label: "Releases", href: "/", count: 1 },
           ].map((item) => (
             <li key={item.label}>
               <Link
                 href={item.href}
-                className="flex items-center gap-1 py-3 border-b-2 transition-colors"
+                className="flex items-center gap-2 px-4 py-3 border-b-2 transition-colors"
                 style={{
-                  color:
-                    tabs?.find((t) => t.label === item.label)?.active
-                      ? "var(--fgColor-default)"
-                      : "var(--fgColor-muted)",
-                  borderColor:
-                    tabs?.find((t) => t.label === item.label)?.active
-                      ? "var(--underlineNav-borderColor-active)"
-                      : "transparent",
+                  color: "#f0f6fc",
+                  fontWeight: item.active ? 600 : 400,
+                  borderColor: item.active ? "#f78166" : "transparent",
                 }}
               >
+                <span style={{ color: "#848d97" }}>{item.icon}</span>
                 {item.label}
-                {item.count && (
+                {item.count !== undefined && (
                   <span
                     className="px-1.5 py-0.5 text-xs rounded-full"
-                    style={{
-                      backgroundColor: "var(--bgColor-neutral-muted)",
-                      color: "var(--fgColor-muted)",
-                    }}
+                    style={{ backgroundColor: "#30363d", color: "#c9d1d9" }}
                   >
                     {item.count}
                   </span>
@@ -143,18 +312,13 @@ export function GitHubShell({
               </Link>
             </li>
           ))}
+          <li className="ml-auto">
+            <button className="flex items-center gap-2 px-4 py-3" style={{ color: "#848d97" }}>
+              {Icons.more}
+            </button>
+          </li>
         </ul>
       </nav>
-
-      {/* Title section if provided */}
-      {title && (
-        <div
-          className="px-6 py-4 border-b"
-          style={{ borderColor: "var(--borderColor-muted)" }}
-        >
-          <h1 className="text-xl font-semibold">{title}</h1>
-        </div>
-      )}
 
       {/* Main content */}
       <main>{children}</main>
