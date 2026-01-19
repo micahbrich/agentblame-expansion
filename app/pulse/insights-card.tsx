@@ -1,6 +1,7 @@
 "use client";
 
 import { strengths, intelligence, costs, reviews } from "./data";
+import { MesaCardHeader } from "@/components/mesa";
 
 // Condensed dots for strengths matrix
 function Dots({ count }: { count: number }) {
@@ -59,11 +60,11 @@ function RatioBar({ human, ai }: { human: number; ai: number }) {
     <div className="flex h-2 w-full rounded-sm overflow-hidden">
       <div
         className="h-full"
-        style={{ width: `${humanPct}%`, backgroundColor: "var(--fgColor-muted)" }}
+        style={{ width: `${humanPct}%`, backgroundColor: "var(--fgColor-success)" }}
       />
       <div
         className="h-full"
-        style={{ width: `${aiPct}%`, backgroundColor: "var(--fgColor-accent)" }}
+        style={{ width: `${aiPct}%`, backgroundColor: "var(--fgColor-severe)" }}
       />
     </div>
   );
@@ -233,14 +234,14 @@ function ReviewBalance() {
         <span className="flex items-center gap-1">
           <span
             className="w-2 h-2 rounded-sm"
-            style={{ backgroundColor: "var(--fgColor-muted)" }}
+            style={{ backgroundColor: "var(--fgColor-success)" }}
           />
           Human
         </span>
         <span className="flex items-center gap-1">
           <span
             className="w-2 h-2 rounded-sm"
-            style={{ backgroundColor: "var(--fgColor-accent)" }}
+            style={{ backgroundColor: "var(--fgColor-severe)" }}
           />
           AI
         </span>
@@ -265,22 +266,7 @@ export function InsightsCard() {
         borderColor: "var(--borderColor-default)",
       }}
     >
-      {/* Header */}
-      <div
-        className="px-4 py-3 flex items-center justify-between border-b"
-        style={{
-          backgroundColor: "var(--bgColor-muted)",
-          borderColor: "var(--borderColor-default)",
-        }}
-      >
-        <div className="flex items-center gap-2">
-          <span style={{ color: "var(--fgColor-success)" }}>🎯</span>
-          <span className="font-semibold text-sm">Team AI Insights</span>
-        </div>
-        <div className="text-xs" style={{ color: "var(--fgColor-muted)" }}>
-          Powered by mesa.dev
-        </div>
-      </div>
+      <MesaCardHeader title="Team AI Insights" />
 
       {/* Bento Grid */}
       <div className="p-4">

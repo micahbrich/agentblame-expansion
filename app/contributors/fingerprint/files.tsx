@@ -1,4 +1,5 @@
 import type { Fingerprint } from "../data";
+import { tint } from "@/components/mesa/primitives/colors";
 
 interface FilesProps {
   files: Fingerprint["files"];
@@ -48,9 +49,9 @@ export function Files({ files }: FilesProps) {
                       style={{
                         backgroundColor:
                           file.percent >= 60
-                            ? "rgba(245, 158, 11, 0.2)"
+                            ? tint.aiStrong
                             : file.percent >= 30
-                              ? "rgba(245, 158, 11, 0.1)"
+                              ? tint.ai
                               : "var(--bgColor-neutral-muted)",
                         color:
                           file.percent >= 60

@@ -7,6 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { heatmap as heatmapColors } from "@/components/mesa/primitives/colors";
 import * as React from "react";
 
 export type HeatmapDatum = {
@@ -115,7 +116,7 @@ function gradientBgStyle(gradient: { ai: number; human: number } | undefined) {
   const aiPercent = (gradient.ai / total) * 100;
   // Orange for AI, green for human
   return {
-    background: `linear-gradient(to right, rgb(245, 158, 11) ${aiPercent}%, rgb(34, 197, 94) ${aiPercent}%)`,
+    background: `linear-gradient(to right, ${heatmapColors.ai.base} ${aiPercent}%, ${heatmapColors.human.base} ${aiPercent}%)`,
   };
 }
 

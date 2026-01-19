@@ -280,6 +280,128 @@ export const duplicates = [
   },
 ];
 
+// Complexity hotspots - functions with high cyclomatic/cognitive complexity
+export interface ComplexityIssue {
+  fn: string;
+  file: string;
+  lines: string;
+  cc: number; // cyclomatic complexity
+  threshold: number;
+  aiPercent: number;
+}
+
+export const complexityIssues: ComplexityIssue[] = [
+  {
+    fn: "handleOAuthCallback",
+    file: "src/auth/oauth.ts",
+    lines: "17-34",
+    cc: 12,
+    threshold: 10,
+    aiPercent: 84,
+  },
+  {
+    fn: "createOrder",
+    file: "src/api/orders.ts",
+    lines: "24-41",
+    cc: 8,
+    threshold: 10,
+    aiPercent: 91,
+  },
+  {
+    fn: "validateFormData",
+    file: "src/utils/validation.ts",
+    lines: "45-89",
+    cc: 9,
+    threshold: 10,
+    aiPercent: 0, // Human-written
+  },
+];
+
+// Over-engineering detection
+export interface AbstractionItem {
+  name: string;
+  type: "interface" | "class" | "factory" | "helper";
+  lines: number;
+}
+
+export interface OverEngineering {
+  abstractions: number;
+  codeLines: number;
+  items: AbstractionItem[];
+}
+
+export const overEngineering: OverEngineering = {
+  abstractions: 3,
+  codeLines: 45,
+  items: [
+    { name: "ReviewPanelProps", type: "interface", lines: 5 },
+    { name: "validateUser", type: "helper", lines: 9 },
+    { name: "userIdSchema", type: "helper", lines: 1 },
+  ],
+};
+
+// Convention drift - naming/import pattern mismatches
+export interface ConventionIssue {
+  type: "naming" | "import" | "structure";
+  found: string;
+  expected: string;
+  file: string;
+}
+
+export const conventionDrift: ConventionIssue[] = [
+  {
+    type: "naming",
+    found: "validateUser()",
+    expected: "isValidUser()",
+    file: "src/utils/validation.ts",
+  },
+  {
+    type: "naming",
+    found: "handleOAuthCallback()",
+    expected: "onOAuthCallback()",
+    file: "src/auth/oauth.ts",
+  },
+  {
+    type: "import",
+    found: "Named imports first",
+    expected: "Type imports first",
+    file: "src/components/ReviewPanel.tsx",
+  },
+];
+
+// Error handling issues
+export interface ErrorHandlingIssue {
+  type: "empty-catch" | "console-only" | "broad-catch" | "missing-boundary";
+  file: string;
+  line: number;
+  code: string;
+  aiGenerated: boolean;
+}
+
+export const errorHandling: ErrorHandlingIssue[] = [
+  {
+    type: "console-only",
+    file: "src/api/users.ts",
+    line: 34,
+    code: "catch (e) { console.log(e) }",
+    aiGenerated: true,
+  },
+  {
+    type: "broad-catch",
+    file: "src/auth/oauth.ts",
+    line: 92,
+    code: "catch (e: any)",
+    aiGenerated: true,
+  },
+  {
+    type: "empty-catch",
+    file: "src/utils/helpers.ts",
+    line: 56,
+    code: "catch (err) {}",
+    aiGenerated: false, // Human-written
+  },
+];
+
 // File stats for the sidebar
 export function getFileStats(file: FileData) {
   const additions = file.lines.filter((l) => l.type === "addition").length;

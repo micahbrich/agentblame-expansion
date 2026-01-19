@@ -2,6 +2,7 @@
 
 import { Icons } from "../icons";
 import { Contributor } from "./data";
+import { diff } from "@/components/mesa/primitives/colors";
 
 interface ContributorRowProps extends Contributor {
   isSelected?: boolean;
@@ -74,10 +75,10 @@ export function ContributorRow({
       {/* Contribution bar */}
       <div className="w-48">
         <div className="flex items-center gap-2 text-xs mb-1">
-          <span style={{ color: "var(--fgColor-success)" }}>
+          <span style={{ color: diff.addition }}>
             +{additions.toLocaleString()}
           </span>
-          <span style={{ color: "var(--fgColor-danger)" }}>
+          <span style={{ color: diff.deletion }}>
             -{deletions.toLocaleString()}
           </span>
         </div>
@@ -92,14 +93,14 @@ export function ContributorRow({
             className="h-full"
             style={{
               width: `${additionWidth}%`,
-              backgroundColor: "var(--fgColor-success)",
+              backgroundColor: diff.addition,
             }}
           />
           <div
             className="h-full"
             style={{
               width: `${100 - additionWidth}%`,
-              backgroundColor: "var(--fgColor-danger)",
+              backgroundColor: diff.deletion,
             }}
           />
         </div>

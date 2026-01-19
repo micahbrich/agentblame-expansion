@@ -3,6 +3,11 @@
 import { fingerprints, fingerprint as defaultFingerprint } from "../data";
 import { Lines } from "./lines";
 import { Heatmap } from "./heatmap";
+import {
+  AIHumanBar,
+  mesaColors,
+} from "@/components/mesa";
+import { tint, heatmap } from "@/components/mesa/primitives/colors";
 
 interface FingerprintCardProps {
   username?: string;
@@ -26,50 +31,45 @@ export function FingerprintCard({
         borderColor: embedded ? undefined : "var(--borderColor-default)",
       }}
     >
-      <div className="p-4 space-y-4">
-        {/* Hero: Big percentage + trend + lines */}
-        <div className="flex items-center gap-4">
-          <div className="text-center">
-            <div
-              className="text-4xl font-bold"
-              style={{ color: "var(--fgColor-severe)" }}
-            >
-              {overall}%
+      <div className="p-5 space-y-5">
+        {/* Hero: Stat block + Bar with legend */}
+        <div className="flex items-start gap-6">
+          {/* Left: Stat block with trend */}
+          <div className="shrink-0 border-r pr-6">
+            <div className="flex items-baseline">
+              <span
+                className="text-base font-bold tracking-tight"
+                style={{ color: heatmap.ai.base }}
+              >
+                {overall}
+              </span>
+              <span
+                className="text-base font-medium ml-0.5"
+                style={{ color: heatmap.ai.base, opacity: 0.5 }}
+              >
+                %
+              </span>
             </div>
-            <div className="text-xs" style={{ color: "var(--fgColor-muted)" }}>
-              AI-assisted
+            <div className="text-sm mt-1" style={{ color: "var(--fgColor-muted)" }}>
+              AI-assisted code
+            </div>
+            <div
+              className="flex items-center gap-1.5 mt-2 text-sm"
+              style={{
+                color: isPositiveTrend ? mesaColors.danger.fg : mesaColors.success.fg,
+              }}
+            >
+              <span className="font-medium">{trend}</span>
+              <span className="text-xs" style={{ color: "var(--fgColor-muted)" }}>
+                vs last 30d
+              </span>
             </div>
           </div>
-          <div className="flex-1">
-            <div
-              className="h-3 rounded-full overflow-hidden flex mb-2"
-              style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-            >
-              <div
-                className="h-full"
-                style={{
-                  width: `${overall}%`,
-                  backgroundColor: "var(--fgColor-severe)",
-                }}
-              />
-              <div
-                className="h-full"
-                style={{
-                  width: `${100 - overall}%`,
-                  backgroundColor: "var(--fgColor-success)",
-                }}
-              />
-            </div>
+
+          {/* Right: Bar + Legend */}
+          <div className="flex-1 pt-2">
+            <AIHumanBar ai={overall} height="lg" className="mb-3" />
             <Lines lines={lines} />
-          </div>
-          <div
-            className="text-sm font-medium px-2 py-1 rounded"
-            style={{
-              color: isPositiveTrend ? "var(--fgColor-danger)" : "var(--fgColor-success)",
-              backgroundColor: isPositiveTrend ? "rgba(239, 68, 68, 0.1)" : "rgba(34, 197, 94, 0.1)",
-            }}
-          >
-            {trend}
           </div>
         </div>
 

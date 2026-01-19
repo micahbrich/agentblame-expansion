@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Icons } from "../icons";
 import { contributors } from "./data";
 import { ContributorRow } from "./contributor-row";
 import { FingerprintCard } from "./fingerprint/card";
 import { SurvivabilityCard } from "./survivability-card";
+import { MesaIcon, PoweredBy } from "@/components/mesa";
 
 export default function ContributorsPage() {
   const [selected, setSelected] = useState(contributors[0].username);
@@ -35,12 +35,15 @@ export default function ContributorsPage() {
             Contributors
           </div>
           <div
-            className="hidden lg:flex flex-1 px-4 py-2 items-center gap-2 text-xs font-medium"
+            className="hidden lg:flex flex-1 px-4 py-2 items-center justify-between text-xs font-medium"
             style={{ color: "var(--fgColor-muted)" }}
           >
-            <span style={{ color: "var(--fgColor-severe)" }}>{Icons.flame}</span>
-            <span>AI Fingerprint</span>
-            <span>@{selected}</span>
+            <div className="flex items-center gap-2">
+              <MesaIcon size={16} />
+              <span className="font-semibold">AI Fingerprint</span>
+              <span>@{selected}</span>
+            </div>
+            <PoweredBy />
           </div>
         </div>
 

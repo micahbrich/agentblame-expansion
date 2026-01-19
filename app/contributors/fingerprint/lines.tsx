@@ -1,23 +1,35 @@
 import type { Fingerprint } from "../data";
+import { heatmap } from "@/components/mesa/primitives/colors";
 
 interface LinesProps {
   lines: Fingerprint["lines"];
 }
 
 export function Lines({ lines }: LinesProps) {
-  const aiPercent = Math.round((lines.ai / lines.total) * 100);
-
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <span className="font-medium">{lines.total.toLocaleString()}</span>
-      <span style={{ color: "var(--fgColor-muted)" }}>total</span>
-      <span style={{ color: "var(--fgColor-muted)" }}>·</span>
-      <span style={{ color: "var(--fgColor-severe)" }}>
-        {lines.ai.toLocaleString()} AI ({aiPercent}%)
+    <div className="flex items-center gap-4 text-xs">
+      <span className="flex items-center gap-1.5">
+        <span
+          className="w-2 h-2 rounded-sm"
+          style={{ backgroundColor: heatmap.ai.base }}
+        />
+        <span style={{ color: heatmap.ai.base }} className="font-medium">
+          {lines.ai.toLocaleString()}
+        </span>
+        <span style={{ color: "var(--fgColor-muted)" }}>AI</span>
       </span>
-      <span style={{ color: "var(--fgColor-muted)" }}>·</span>
-      <span style={{ color: "var(--fgColor-success)" }}>
-        {lines.human.toLocaleString()} human
+      <span className="flex items-center gap-1.5">
+        <span
+          className="w-2 h-2 rounded-sm"
+          style={{ backgroundColor: heatmap.human.base }}
+        />
+        <span style={{ color: heatmap.human.base }} className="font-medium">
+          {lines.human.toLocaleString()}
+        </span>
+        <span style={{ color: "var(--fgColor-muted)" }}>human</span>
+      </span>
+      <span style={{ color: "var(--fgColor-muted)" }}>
+        {lines.total.toLocaleString()} total
       </span>
     </div>
   );

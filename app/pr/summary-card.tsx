@@ -1,5 +1,18 @@
 import { Icons } from "../icons";
-import { stats, securityFiles, duplicates } from "./data";
+import {
+  stats,
+  securityFiles,
+  duplicates,
+  complexityIssues,
+  overEngineering,
+  conventionDrift,
+  errorHandling,
+} from "./data";
+import {
+  MesaCardHeader,
+  AIHumanBar,
+  AIHumanLegend,
+} from "@/components/mesa";
 
 export function SummaryCard() {
   return (
@@ -10,32 +23,10 @@ export function SummaryCard() {
         borderColor: "var(--borderColor-default)",
       }}
     >
-      {/* Header */}
-      <div
-        className="px-4 py-3 flex items-center justify-between border-b"
-        style={{
-          backgroundColor: "var(--bgColor-muted)",
-          borderColor: "var(--borderColor-default)",
-        }}
-      >
-        <div className="flex items-center gap-2">
-          <span style={{ color: "var(--fgColor-severe)" }}>{Icons.flame}</span>
-          <span className="font-semibold text-sm">AI Contribution Summary</span>
-          <span
-            className="px-2 py-0.5 text-xs rounded-full font-medium"
-            style={{
-              backgroundColor: "var(--bgColor-severe-muted)",
-              color: "var(--fgColor-severe)",
-            }}
-          >
-            {stats.percent}% AI-generated
-          </span>
-        </div>
-
-        <div className="text-xs" style={{ color: "var(--fgColor-muted)" }}>
-          Powered by agentblame
-        </div>
-      </div>
+      <MesaCardHeader
+        title="AI Contribution Summary"
+        badge={{ label: `${stats.percent}% AI-generated`, variant: "severe" }}
+      />
 
       {/* Content */}
       <div className="p-4 space-y-4">
@@ -49,42 +40,8 @@ export function SummaryCard() {
             >
               Line Attribution
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <div
-                  className="w-3 h-3 rounded-sm"
-                  style={{ backgroundColor: "var(--fgColor-severe)" }}
-                />
-                <span className="text-sm font-medium">{stats.ai} AI</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <div
-                  className="w-3 h-3 rounded-sm"
-                  style={{ backgroundColor: "var(--fgColor-success)" }}
-                />
-                <span className="text-sm font-medium">{stats.human} Human</span>
-              </div>
-            </div>
-            {/* Progress bar */}
-            <div
-              className="h-2 rounded-full overflow-hidden mt-2 flex"
-              style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-            >
-              <div
-                className="h-full"
-                style={{
-                  width: `${stats.percent}%`,
-                  backgroundColor: "var(--fgColor-severe)",
-                }}
-              />
-              <div
-                className="h-full"
-                style={{
-                  width: `${100 - stats.percent}%`,
-                  backgroundColor: "var(--fgColor-success)",
-                }}
-              />
-            </div>
+            <AIHumanLegend aiValue={stats.ai} humanValue={stats.human} />
+            <AIHumanBar ai={stats.percent} className="mt-2" />
           </div>
 
           {/* Provider breakdown */}
@@ -119,12 +76,12 @@ export function SummaryCard() {
           </div>
         </div>
 
-        {/* Alerts section */}
-        <div className="flex gap-4">
+        {/* Alerts grid */}
+        <div className="grid grid-cols-3 gap-4">
           {/* Security files */}
           {securityFiles.length > 0 && (
             <div
-              className="flex-1 p-3 rounded-md border"
+              className="p-3 rounded-md border"
               style={{
                 backgroundColor: "var(--bgColor-attention-muted)",
                 borderColor: "var(--borderColor-attention-muted)",
@@ -168,7 +125,7 @@ export function SummaryCard() {
           {/* Duplicates */}
           {duplicates.length > 0 && (
             <div
-              className="flex-1 p-3 rounded-md border"
+              className="p-3 rounded-md border"
               style={{
                 backgroundColor: "var(--bgColor-muted)",
                 borderColor: "var(--borderColor-default)",
@@ -204,6 +161,255 @@ export function SummaryCard() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Complexity Hotspots */}
+          {complexityIssues.length > 0 && (
+            <div
+              className="p-3 rounded-md border"
+              style={{
+                backgroundColor: "var(--bgColor-attention-muted)",
+                borderColor: "var(--borderColor-attention-muted)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span style={{ color: "var(--fgColor-attention)" }}>
+                  {Icons.flame}
+                </span>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "var(--fgColor-attention)" }}
+                >
+                  Complex functions
+                </span>
+                <span
+                  className="text-xs"
+                  style={{ color: "var(--fgColor-muted)" }}
+                >
+                  (10+ branches)
+                </span>
+              </div>
+              <div className="space-y-2">
+                {complexityIssues.map((issue) => (
+                  <div key={`${issue.file}:${issue.fn}`} className="text-sm">
+                    <div className="flex items-center justify-between">
+                      <code
+                        className="text-xs font-medium"
+                        style={{ color: "var(--fgColor-default)" }}
+                      >
+                        {issue.fn}()
+                      </code>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="text-xs"
+                          style={{
+                            color:
+                              issue.cc > issue.threshold
+                                ? "var(--fgColor-danger)"
+                                : "var(--fgColor-muted)",
+                          }}
+                        >
+                          {issue.cc} branches
+                        </span>
+                        <span
+                          className="text-xs px-1 py-0.5 rounded"
+                          style={{
+                            backgroundColor:
+                              issue.aiPercent > 50
+                                ? "var(--bgColor-severe-muted)"
+                                : "var(--bgColor-success-muted)",
+                            color:
+                              issue.aiPercent > 50
+                                ? "var(--fgColor-severe)"
+                                : "var(--fgColor-success)",
+                          }}
+                        >
+                          {issue.aiPercent > 50 ? "🤖 AI" : "👤 Human"}
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      className="text-xs"
+                      style={{ color: "var(--fgColor-muted)" }}
+                    >
+                      {issue.file}:{issue.lines}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Over-Engineering Smell */}
+          {overEngineering.abstractions > 0 && (
+            <div
+              className="p-3 rounded-md border"
+              style={{
+                backgroundColor: "var(--bgColor-attention-muted)",
+                borderColor: "var(--borderColor-attention-muted)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span style={{ color: "var(--fgColor-attention)" }}>
+                  {Icons.gear}
+                </span>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "var(--fgColor-attention)" }}
+                >
+                  Potential over-engineering
+                </span>
+              </div>
+              <div
+                className="text-xs mb-2"
+                style={{ color: "var(--fgColor-muted)" }}
+              >
+                {overEngineering.abstractions} new abstractions for{" "}
+                {overEngineering.codeLines} lines of code
+              </div>
+              <div className="space-y-1">
+                {overEngineering.items.map((item) => (
+                  <div
+                    key={item.name}
+                    className="flex items-center justify-between text-xs"
+                  >
+                    <code
+                      className="px-1 py-0.5 rounded"
+                      style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
+                    >
+                      {item.name}
+                    </code>
+                    <span style={{ color: "var(--fgColor-muted)" }}>
+                      {item.type} · {item.lines} lines
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Convention Drift */}
+          {conventionDrift.length > 0 && (
+            <div
+              className="p-3 rounded-md border"
+              style={{
+                backgroundColor: "var(--bgColor-muted)",
+                borderColor: "var(--borderColor-default)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span style={{ color: "var(--fgColor-muted)" }}>
+                  {Icons.code}
+                </span>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "var(--fgColor-muted)" }}
+                >
+                  Style differs from codebase patterns
+                </span>
+              </div>
+              <div className="space-y-2">
+                {conventionDrift.map((issue, i) => (
+                  <div key={i} className="text-xs">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="px-1 py-0.5 rounded uppercase"
+                        style={{
+                          backgroundColor: "var(--bgColor-neutral-muted)",
+                          color: "var(--fgColor-muted)",
+                          fontSize: "10px",
+                        }}
+                      >
+                        {issue.type}
+                      </span>
+                      <code style={{ color: "var(--fgColor-default)" }}>
+                        {issue.found}
+                      </code>
+                    </div>
+                    <div
+                      className="mt-0.5 pl-1"
+                      style={{ color: "var(--fgColor-muted)" }}
+                    >
+                      → existing pattern: {issue.expected}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Error Handling Review */}
+          {errorHandling.length > 0 && (
+            <div
+              className="p-3 rounded-md border"
+              style={{
+                backgroundColor: "var(--bgColor-attention-muted)",
+                borderColor: "var(--borderColor-attention-muted)",
+              }}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <span style={{ color: "var(--fgColor-attention)" }}>
+                  {Icons.warning}
+                </span>
+                <span
+                  className="text-sm font-medium"
+                  style={{ color: "var(--fgColor-attention)" }}
+                >
+                  Error handling needs review
+                </span>
+              </div>
+              <div className="space-y-2">
+                {errorHandling.map((issue, i) => (
+                  <div key={i} className="text-xs">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="px-1 py-0.5 rounded"
+                        style={{
+                          backgroundColor:
+                            issue.type === "empty-catch"
+                              ? "var(--bgColor-danger-muted)"
+                              : "var(--bgColor-attention-muted)",
+                          color:
+                            issue.type === "empty-catch"
+                              ? "var(--fgColor-danger)"
+                              : "var(--fgColor-attention)",
+                        }}
+                      >
+                        {issue.type === "empty-catch" && "Empty catch"}
+                        {issue.type === "console-only" && "Console-only"}
+                        {issue.type === "broad-catch" && "Broad catch"}
+                        {issue.type === "missing-boundary" && "No boundary"}
+                      </span>
+                      <span
+                        className="px-1 py-0.5 rounded"
+                        style={{
+                          backgroundColor: issue.aiGenerated
+                            ? "var(--bgColor-severe-muted)"
+                            : "var(--bgColor-success-muted)",
+                          color: issue.aiGenerated
+                            ? "var(--fgColor-severe)"
+                            : "var(--fgColor-success)",
+                        }}
+                      >
+                        {issue.aiGenerated ? "🤖 AI" : "👤 Human"}
+                      </span>
+                    </div>
+                    <div
+                      className="mt-1"
+                      style={{ color: "var(--fgColor-muted)" }}
+                    >
+                      {issue.file}:{issue.line}
+                    </div>
+                    <code
+                      className="mt-1 block px-1 py-0.5 rounded"
+                      style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
+                    >
+                      {issue.code}
+                    </code>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

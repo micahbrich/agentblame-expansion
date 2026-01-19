@@ -1,6 +1,7 @@
 import { codeToHtml } from "shiki";
 import { DiffLine as DiffLineData } from "./data";
 import { Icons } from "../icons";
+import { diff } from "@/components/mesa/primitives/colors";
 
 function getLang(path: string): string {
   const ext = path.split(".").pop();
@@ -76,7 +77,7 @@ export async function DiffLine({ line, path }: Props) {
               ? "var(--diffBlob-deletion-bgColor-num, #ffcecb)"
               : "var(--bgColor-muted, #f6f8fa)",
           color: "var(--fgColor-muted, #656d76)",
-          boxShadow: line.ai ? "inset 4px 0 0 0 #A93000" : "none",
+          boxShadow: line.ai ? `inset 4px 0 0 0 ${diff.ai}` : "none",
         }}
         title={
           line.ai ? `AI Generated (${line.provider} - ${line.model})` : undefined

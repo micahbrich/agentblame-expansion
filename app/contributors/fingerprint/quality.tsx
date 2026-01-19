@@ -1,4 +1,5 @@
 import type { Fingerprint } from "../data";
+import { tint } from "@/components/mesa/primitives/colors";
 
 interface QualityProps {
   quality: Fingerprint["quality"];
@@ -47,9 +48,7 @@ export function Quality({ quality }: QualityProps) {
               color: isPositive
                 ? "var(--fgColor-success)"
                 : "var(--fgColor-danger)",
-              backgroundColor: isPositive
-                ? "rgba(34, 197, 94, 0.1)"
-                : "rgba(239, 68, 68, 0.1)",
+              backgroundColor: isPositive ? tint.success : tint.danger,
             }}
           >
             {quality.vsTeamAvg} vs team

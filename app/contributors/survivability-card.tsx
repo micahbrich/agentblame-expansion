@@ -1,6 +1,5 @@
 "use client";
 
-import { Icons } from "../icons";
 import { survivability } from "./data";
 import {
   ChartContainer,
@@ -8,6 +7,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { MesaCardHeader } from "@/components/mesa";
 
 export function SurvivabilityCard() {
   const { unchanged, modified, deleted, byTool, byCodeType, productivityWindows } =
@@ -27,28 +27,10 @@ export function SurvivabilityCard() {
         borderColor: "var(--borderColor-default)",
       }}
     >
-      {/* Header */}
-      <div
-        className="px-4 py-3 flex items-center justify-between border-b"
-        style={{
-          backgroundColor: "var(--bgColor-muted)",
-          borderColor: "var(--borderColor-default)",
-        }}
-      >
-        <div className="flex items-center gap-2">
-          <span style={{ color: "var(--fgColor-done)" }}>{Icons.trophy}</span>
-          <span className="font-semibold text-sm">Code Survivability</span>
-          <span
-            className="px-2 py-0.5 text-xs rounded-full"
-            style={{
-              backgroundColor: "var(--bgColor-success-muted)",
-              color: "var(--fgColor-success)",
-            }}
-          >
-            {unchanged}% unchanged after 90 days
-          </span>
-        </div>
-      </div>
+      <MesaCardHeader
+        title="Code Survivability"
+        badge={{ label: `${unchanged}% unchanged after 90 days`, variant: "success" }}
+      />
 
       {/* Content */}
       <div className="p-4 space-y-4">

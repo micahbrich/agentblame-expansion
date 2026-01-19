@@ -1,6 +1,7 @@
 "use client";
 
 import { HeatmapCalendar, type HeatmapCell } from "@/components/ui/heatmap-calendar";
+import { heatmap as heatmapColors } from "@/components/mesa/primitives/colors";
 import type { Fingerprint } from "../data";
 
 interface HeatmapProps {
@@ -26,12 +27,15 @@ export function Heatmap({ activity }: HeatmapProps) {
     const meta = cell.meta as { ai: number; human: number } | undefined;
     const ai = meta?.ai ?? 0;
     const human = meta?.human ?? 0;
+    const total = ai + human;
+    const aiPct = total > 0 ? Math.round((ai / total) * 100) : 0;
+    const humanPct = total > 0 ? 100 - aiPct : 0;
     return (
       <div className="text-sm">
         <div className="font-medium">{cell.label}</div>
         <div className="flex gap-3 mt-1">
-          <span style={{ color: "rgb(245, 158, 11)" }}>{ai} AI</span>
-          <span style={{ color: "rgb(34, 197, 94)" }}>{human} human</span>
+          <span style={{ color: heatmapColors.ai.base }}>{aiPct}% AI</span>
+          <span style={{ color: heatmapColors.human.base }}>{humanPct}% human</span>
         </div>
       </div>
     );
@@ -46,10 +50,10 @@ export function Heatmap({ activity }: HeatmapProps) {
         cellGap={3}
         palette={[
           "var(--bgColor-neutral-muted)",
-          "rgba(245, 158, 11, 0.25)",
-          "rgba(245, 158, 11, 0.5)",
-          "rgba(245, 158, 11, 0.75)",
-          "rgb(245, 158, 11)",
+          heatmapColors.ai.low,
+          heatmapColors.ai.mid,
+          heatmapColors.ai.high,
+          heatmapColors.ai.base,
         ]}
         legend={{ show: false }}
         axisLabels={{

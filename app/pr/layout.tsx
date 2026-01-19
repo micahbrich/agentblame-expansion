@@ -1,6 +1,7 @@
 import { Icons } from "../icons";
 import { files, pr, stats, getFileStats, getFileTree } from "./data";
 import { DiffLine } from "./diff-line";
+import { diff, tint } from "@/components/mesa/primitives/colors";
 
 export default function PRLayout({ children }: { children: React.ReactNode }) {
   const fileTree = getFileTree();
@@ -148,8 +149,8 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
 
           {/* +/- stats with colored blocks */}
           <div className="flex items-center gap-1 text-sm">
-            <span style={{ color: "#3fb950" }}>+{stats.additions}</span>
-            <span style={{ color: "#f85149" }}>-{stats.deletions}</span>
+            <span style={{ color: diff.addition }}>+{stats.additions}</span>
+            <span style={{ color: diff.deletion }}>-{stats.deletions}</span>
             <div className="flex gap-0.5 ml-1">
               {[...Array(5)].map((_, i) => {
                 const ratio = stats.additions / (stats.additions + stats.deletions);
@@ -158,7 +159,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                     key={i}
                     className="w-2 h-2 rounded-sm"
                     style={{
-                      backgroundColor: i < Math.round(ratio * 5) ? "#3fb950" : "#f85149",
+                      backgroundColor: i < Math.round(ratio * 5) ? diff.addition : diff.deletion,
                     }}
                   />
                 );
@@ -308,10 +309,10 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                             style={{
                               backgroundColor:
                                 fileStats.aiPercent >= 50
-                                  ? "rgba(169, 48, 0, 0.15)"
-                                  : "rgba(56, 139, 253, 0.15)",
+                                  ? diff.aiBg
+                                  : tint.accent,
                               color:
-                                fileStats.aiPercent >= 50 ? "#A93000" : "#4493f8",
+                                fileStats.aiPercent >= 50 ? diff.ai : diff.accent,
                             }}
                           >
                             {fileStats.aiPercent}%
@@ -366,9 +367,9 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                         style={{
                           backgroundColor:
                             fileStats.aiPercent >= 50
-                              ? "rgba(169, 48, 0, 0.15)"
-                              : "rgba(56, 139, 253, 0.15)",
-                          color: fileStats.aiPercent >= 50 ? "#A93000" : "#4493f8",
+                              ? diff.aiBg
+                              : tint.accent,
+                          color: fileStats.aiPercent >= 50 ? diff.ai : diff.accent,
                         }}
                       >
                         {fileStats.aiPercent}% AI
@@ -376,10 +377,10 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <span style={{ color: "#3fb950" }}>
+                    <span style={{ color: diff.addition }}>
                       +{fileStats.additions}
                     </span>
-                    <span style={{ color: "#f85149" }}>
+                    <span style={{ color: diff.deletion }}>
                       -{fileStats.deletions}
                     </span>
                     <div className="flex gap-0.5">
@@ -393,7 +394,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                             className="w-2 h-2 rounded-sm"
                             style={{
                               backgroundColor:
-                                i < Math.round(ratio * 5) ? "#3fb950" : "#f85149",
+                                i < Math.round(ratio * 5) ? diff.addition : diff.deletion,
                             }}
                           />
                         );
