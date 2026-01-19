@@ -6,6 +6,8 @@ Design exercise exploring expanded views for [mesa-dot-dev/agentblame](https://g
 
 Static mockups that visualize how agentblame could expand beyond PR summaries into GitHub's Insights pages. Three views:
 
+<img width="1822" height="1180" alt="Screenshot 2026-01-19 at 11 33 22" src="https://github.com/user-attachments/assets/a3959076-36bd-4ef1-bd2a-bb60ff353ddf" />
+
 ### `/pr` — Pull Request Summary
 
 Expands the existing PR summary banner with:
@@ -17,12 +19,16 @@ Expands the existing PR summary banner with:
 - Convention drift warnings
 - Error handling review flags
 
+<img width="1822" height="1180" alt="Screenshot 2026-01-19 at 11 33 25" src="https://github.com/user-attachments/assets/a648f03d-8a50-42f7-a9e4-62ddd0b1efc6" />
+
 ### `/pulse` — Repository Insights
 
 Injects into GitHub's Pulse page:
 - AI adoption trends over time
 - Tool usage breakdown by provider
 - Repo-wide AI contribution stats
+
+<img width="1822" height="1180" alt="Screenshot 2026-01-19 at 11 33 29" src="https://github.com/user-attachments/assets/00dc580e-ed16-4553-8fe7-85741ecc66f3" />
 
 ### `/contributors` — Personal AI Fingerprint
 
