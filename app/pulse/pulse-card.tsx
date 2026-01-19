@@ -8,23 +8,20 @@ import {
 } from "@/components/ui/chart";
 import { Area, AreaChart, XAxis, YAxis, Bar, BarChart } from "recharts";
 import {
+  MesaCard,
   MesaCardHeader,
+  SectionTitle,
   StatDisplay,
   StatGrid,
   DetailedBreakdownList,
+  mesaColors,
 } from "@/components/mesa";
 
 export function PulseCard() {
   const { period, totalLines, aiLines, aiPercent } = pulse;
 
   return (
-    <div
-      className="mx-6 my-6 rounded-md border overflow-hidden"
-      style={{
-        backgroundColor: "var(--bgColor-default)",
-        borderColor: "var(--borderColor-default)",
-      }}
-    >
+    <MesaCard margin="mx-6 my-6">
       <MesaCardHeader
         title="AI Contribution Trends"
         badge={{ label: period, variant: "severe" }}
@@ -41,18 +38,12 @@ export function PulseCard() {
       <div className="p-4 space-y-6">
         {/* AI adoption over time */}
         <div>
-          <h3 className="text-sm font-semibold mb-3">AI Adoption Over Time</h3>
+          <SectionTitle size="md" className="mb-3">AI Adoption Over Time</SectionTitle>
           <div className="h-48">
             <ChartContainer
               config={{
-                human: {
-                  label: "Human",
-                  color: "var(--fgColor-success)",
-                },
-                ai: {
-                  label: "AI",
-                  color: "var(--fgColor-severe)",
-                },
+                human: { label: "Human", color: mesaColors.success.fg },
+                ai: { label: "AI", color: mesaColors.severe.fg },
               }}
               className="h-full w-full"
             >
@@ -101,18 +92,12 @@ export function PulseCard() {
           />
 
           <div>
-            <h3 className="text-sm font-semibold mb-3">Weekly Trend</h3>
+            <SectionTitle size="md" className="mb-3">Weekly Trend</SectionTitle>
             <div className="h-32">
               <ChartContainer
                 config={{
-                  cursor: {
-                    label: "Cursor",
-                    color: "var(--fgColor-severe)",
-                  },
-                  claude: {
-                    label: "Claude Code",
-                    color: "var(--fgColor-attention)",
-                  },
+                  cursor: { label: "Cursor", color: mesaColors.severe.fg },
+                  claude: { label: "Claude Code", color: mesaColors.attention.fg },
                 }}
                 className="h-full w-full"
               >
@@ -142,6 +127,6 @@ export function PulseCard() {
           </div>
         </div>
       </div>
-    </div>
+    </MesaCard>
   );
 }

@@ -5,9 +5,41 @@ import { Lines } from "./lines";
 import { Heatmap } from "./heatmap";
 import {
   AIHumanBar,
+  MesaCard,
+  SectionTitle,
+  ProgressBar,
   mesaColors,
 } from "@/components/mesa";
-import { tint, heatmap } from "@/components/mesa/primitives/colors";
+import { heatmap, type MesaColorName } from "@/components/mesa/primitives/colors";
+
+/** Small helper for breakdown columns - bar on left, label on right */
+function BreakdownColumn({
+  title,
+  items,
+  color,
+  labelWidth,
+}: {
+  title: string;
+  items: Array<{ label: string; percent: number }>;
+  color: MesaColorName;
+  labelWidth: string;
+}) {
+  return (
+    <div>
+      <SectionTitle>{title}</SectionTitle>
+      <div className="space-y-1.5">
+        {items.map(({ label, percent }) => (
+          <div key={label} className="flex items-center gap-2">
+            <ProgressBar value={percent} color={color} height="sm" className="flex-1" />
+            <span className={`text-xs ${labelWidth} text-right truncate`}>
+              {label} <span style={{ color: mesaColors.muted.fg }}>{percent}%</span>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface FingerprintCardProps {
   username?: string;
@@ -24,13 +56,7 @@ export function FingerprintCard({
   const isPositiveVsTeam = quality.vsTeamAvg.startsWith("+");
 
   return (
-    <div
-      className={embedded ? "overflow-hidden" : "rounded-md border overflow-hidden"}
-      style={{
-        backgroundColor: "var(--bgColor-default)",
-        borderColor: embedded ? undefined : "var(--borderColor-default)",
-      }}
-    >
+    <MesaCard borderless={embedded}>
       <div className="p-5 space-y-5">
         {/* Hero: Stat block + Bar with legend */}
         <div className="flex items-start gap-6">
@@ -151,91 +177,26 @@ export function FingerprintCard({
 
         {/* 3-column breakdown */}
         <div className="grid grid-cols-3 gap-4">
-          {/* By file type */}
-          <div>
-            <h4 className="text-xs font-medium mb-2" style={{ color: "var(--fgColor-muted)" }}>
-              By File Type
-            </h4>
-            <div className="space-y-1.5">
-              {byFileType.map((item) => (
-                <div key={item.type} className="flex items-center gap-2">
-                  <div
-                    className="flex-1 h-1.5 rounded-full overflow-hidden"
-                    style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                  >
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${item.percent}%`,
-                        backgroundColor: "var(--fgColor-severe)",
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs w-16 text-right">
-                    {item.type} <span style={{ color: "var(--fgColor-muted)" }}>{item.percent}%</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* By tool */}
-          <div>
-            <h4 className="text-xs font-medium mb-2" style={{ color: "var(--fgColor-muted)" }}>
-              By Tool
-            </h4>
-            <div className="space-y-1.5">
-              {byTool.map((item) => (
-                <div key={item.tool} className="flex items-center gap-2">
-                  <div
-                    className="flex-1 h-1.5 rounded-full overflow-hidden"
-                    style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                  >
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${item.percent}%`,
-                        backgroundColor: "var(--fgColor-attention)",
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs w-20 text-right truncate">
-                    {item.tool} <span style={{ color: "var(--fgColor-muted)" }}>{item.percent}%</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* By model */}
-          <div>
-            <h4 className="text-xs font-medium mb-2" style={{ color: "var(--fgColor-muted)" }}>
-              By Model
-            </h4>
-            <div className="space-y-1.5">
-              {byModel.map((item) => (
-                <div key={item.model} className="flex items-center gap-2">
-                  <div
-                    className="flex-1 h-1.5 rounded-full overflow-hidden"
-                    style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                  >
-                    <div
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${item.percent}%`,
-                        backgroundColor: "var(--fgColor-accent)",
-                      }}
-                    />
-                  </div>
-                  <span className="text-xs w-24 text-right truncate">
-                    {item.model.replace("claude-", "")} <span style={{ color: "var(--fgColor-muted)" }}>{item.percent}%</span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <BreakdownColumn
+            title="By File Type"
+            items={byFileType.map(({ type, percent }) => ({ label: type, percent }))}
+            color="severe"
+            labelWidth="w-16"
+          />
+          <BreakdownColumn
+            title="By Tool"
+            items={byTool.map(({ tool, percent }) => ({ label: tool, percent }))}
+            color="attention"
+            labelWidth="w-20"
+          />
+          <BreakdownColumn
+            title="By Model"
+            items={byModel.map(({ model, percent }) => ({ label: model.replace("claude-", ""), percent }))}
+            color="accent"
+            labelWidth="w-24"
+          />
         </div>
       </div>
-    </div>
+    </MesaCard>
   );
 }
