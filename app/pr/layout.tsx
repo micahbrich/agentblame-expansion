@@ -1,7 +1,7 @@
 import { Icons } from "../icons";
 import { files, pr, stats, getFileStats, getFileTree } from "./data";
 import { DiffLine } from "./diff-line";
-import { diff, tint } from "@/components/mesa/primitives/colors";
+import { DiffStats, AIPercentBadge } from "@/components/mesa";
 
 export default function PRLayout({ children }: { children: React.ReactNode }) {
   const fileTree = getFileTree();
@@ -147,25 +147,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
             ))}
           </div>
 
-          {/* +/- stats with colored blocks */}
-          <div className="flex items-center gap-1 text-sm">
-            <span style={{ color: diff.addition }}>+{stats.additions}</span>
-            <span style={{ color: diff.deletion }}>-{stats.deletions}</span>
-            <div className="flex gap-0.5 ml-1">
-              {[...Array(5)].map((_, i) => {
-                const ratio = stats.additions / (stats.additions + stats.deletions);
-                return (
-                  <div
-                    key={i}
-                    className="w-2 h-2 rounded-sm"
-                    style={{
-                      backgroundColor: i < Math.round(ratio * 5) ? diff.addition : diff.deletion,
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <DiffStats additions={stats.additions} deletions={stats.deletions} />
         </nav>
       </div>
 
@@ -304,19 +286,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                           {file.path.split("/").pop()}
                         </span>
                         {fileStats.aiPercent > 0 && (
-                          <span
-                            className="ml-auto px-1 py-0.5 text-xs rounded"
-                            style={{
-                              backgroundColor:
-                                fileStats.aiPercent >= 50
-                                  ? diff.aiBg
-                                  : tint.accent,
-                              color:
-                                fileStats.aiPercent >= 50 ? diff.ai : diff.accent,
-                            }}
-                          >
-                            {fileStats.aiPercent}%
-                          </span>
+                          <AIPercentBadge percent={fileStats.aiPercent} className="ml-auto" />
                         )}
                       </button>
                     );
@@ -362,44 +332,11 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
                       {Icons.copy}
                     </button>
                     {fileStats.aiPercent > 0 && (
-                      <span
-                        className="px-1.5 py-0.5 text-xs rounded"
-                        style={{
-                          backgroundColor:
-                            fileStats.aiPercent >= 50
-                              ? diff.aiBg
-                              : tint.accent,
-                          color: fileStats.aiPercent >= 50 ? diff.ai : diff.accent,
-                        }}
-                      >
-                        {fileStats.aiPercent}% AI
-                      </span>
+                      <AIPercentBadge percent={fileStats.aiPercent} showLabel />
                     )}
                   </div>
                   <div className="flex items-center gap-3 text-sm">
-                    <span style={{ color: diff.addition }}>
-                      +{fileStats.additions}
-                    </span>
-                    <span style={{ color: diff.deletion }}>
-                      -{fileStats.deletions}
-                    </span>
-                    <div className="flex gap-0.5">
-                      {[...Array(5)].map((_, i) => {
-                        const ratio =
-                          fileStats.additions /
-                          (fileStats.additions + fileStats.deletions);
-                        return (
-                          <div
-                            key={i}
-                            className="w-2 h-2 rounded-sm"
-                            style={{
-                              backgroundColor:
-                                i < Math.round(ratio * 5) ? diff.addition : diff.deletion,
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
+                    <DiffStats additions={fileStats.additions} deletions={fileStats.deletions} />
                     <label
                       className="flex items-center gap-1 text-xs"
                       style={{ color: "var(--fgColor-muted)" }}

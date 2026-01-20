@@ -9,67 +9,54 @@ import {
   errorHandling,
 } from "./data";
 import {
+  MesaCard,
   MesaCardHeader,
+  SectionTitle,
   AIHumanBar,
   AIHumanLegend,
+  AlertCard,
+  OriginBadge,
+  CodeSnippet,
+  mesaColors,
 } from "@/components/mesa";
+
+/** Error type label mapping */
+const errorTypeLabels: Record<string, string> = {
+  "empty-catch": "Empty catch",
+  "console-only": "Console-only",
+  "broad-catch": "Broad catch",
+  "missing-boundary": "No boundary",
+};
 
 export function SummaryCard() {
   return (
-    <div
-      className="mx-4 my-4 rounded-md border overflow-hidden"
-      style={{
-        backgroundColor: "var(--bgColor-default)",
-        borderColor: "var(--borderColor-default)",
-      }}
-    >
+    <MesaCard margin="mx-4 my-4">
       <MesaCardHeader
         title="AI Contribution Summary"
         badge={{ label: `${stats.percent}% AI-generated`, variant: "severe" }}
       />
 
-      {/* Content */}
       <div className="p-4 space-y-4">
         {/* Stats row */}
         <div className="flex gap-6">
           {/* AI vs Human breakdown */}
           <div className="flex-1">
-            <div
-              className="text-xs font-medium mb-2"
-              style={{ color: "var(--fgColor-muted)" }}
-            >
-              Line Attribution
-            </div>
+            <SectionTitle>Line Attribution</SectionTitle>
             <AIHumanLegend aiValue={stats.ai} humanValue={stats.human} />
             <AIHumanBar ai={stats.percent} className="mt-2" />
           </div>
 
           {/* Provider breakdown */}
           <div className="flex-1">
-            <div
-              className="text-xs font-medium mb-2"
-              style={{ color: "var(--fgColor-muted)" }}
-            >
-              By Provider
-            </div>
+            <SectionTitle>By Provider</SectionTitle>
             <div className="space-y-1">
               {stats.providers.map((p) => (
-                <div
-                  key={p.name}
-                  className="flex items-center justify-between text-sm"
-                >
+                <div key={p.name} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{p.name}</span>
-                    <span
-                      className="text-xs"
-                      style={{ color: "var(--fgColor-muted)" }}
-                    >
-                      ({p.model})
-                    </span>
+                    <span className="text-xs" style={{ color: mesaColors.muted.fg }}>({p.model})</span>
                   </div>
-                  <span>
-                    {p.lines} lines ({p.percent}%)
-                  </span>
+                  <span>{p.lines} lines ({p.percent}%)</span>
                 </div>
               ))}
             </div>
@@ -80,285 +67,114 @@ export function SummaryCard() {
         <div className="grid grid-cols-3 gap-4">
           {/* Security files */}
           {securityFiles.length > 0 && (
-            <div
-              className="p-3 rounded-md border"
-              style={{
-                backgroundColor: "var(--bgColor-attention-muted)",
-                borderColor: "var(--borderColor-attention-muted)",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <span style={{ color: "var(--fgColor-attention)" }}>
-                  {Icons.warning}
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--fgColor-attention)" }}
-                >
-                  Security-sensitive files modified
-                </span>
-              </div>
+            <AlertCard icon={Icons.warning} title="Security-sensitive files modified" variant="attention">
               <div className="space-y-1">
                 {securityFiles.map((f) => (
-                  <div
-                    key={f.path}
-                    className="flex items-center justify-between text-sm"
-                  >
-                    <code
-                      className="text-xs px-1 py-0.5 rounded"
-                      style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                    >
-                      {f.path}
-                    </code>
-                    <span
-                      className="text-xs font-medium"
-                      style={{ color: "var(--fgColor-severe)" }}
-                    >
+                  <div key={f.path} className="flex items-center justify-between text-sm">
+                    <CodeSnippet>{f.path}</CodeSnippet>
+                    <span className="text-xs font-medium" style={{ color: mesaColors.severe.fg }}>
                       {f.aiPercent}% AI
                     </span>
                   </div>
                 ))}
               </div>
-            </div>
+            </AlertCard>
           )}
 
           {/* Duplicates */}
           {duplicates.length > 0 && (
-            <div
-              className="p-3 rounded-md border"
-              style={{
-                backgroundColor: "var(--bgColor-muted)",
-                borderColor: "var(--borderColor-default)",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <span style={{ color: "var(--fgColor-muted)" }}>{Icons.copy}</span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--fgColor-muted)" }}
-                >
-                  Potential duplicates detected
-                </span>
-              </div>
+            <AlertCard icon={Icons.copy} title="Potential duplicates detected" variant="muted">
               {duplicates.map((d) => (
                 <div key={d.hash} className="space-y-1">
-                  <div
-                    className="text-xs"
-                    style={{ color: "var(--fgColor-muted)" }}
-                  >
+                  <div className="text-xs" style={{ color: mesaColors.muted.fg }}>
                     Pattern #{d.hash} appears in {d.locations.length} locations:
                   </div>
                   <div className="flex flex-wrap gap-1">
                     {d.locations.map((loc) => (
-                      <code
-                        key={loc}
-                        className="text-xs px-1 py-0.5 rounded"
-                        style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                      >
-                        {loc}
-                      </code>
+                      <CodeSnippet key={loc}>{loc}</CodeSnippet>
                     ))}
                   </div>
                 </div>
               ))}
-            </div>
+            </AlertCard>
           )}
 
           {/* Complexity Hotspots */}
           {complexityIssues.length > 0 && (
-            <div
-              className="p-3 rounded-md border"
-              style={{
-                backgroundColor: "var(--bgColor-attention-muted)",
-                borderColor: "var(--borderColor-attention-muted)",
-              }}
+            <AlertCard
+              icon={Icons.flame}
+              title="Complex functions"
+              subtitle="(10+ branches)"
+              variant="attention"
             >
-              <div className="flex items-center gap-2 mb-2">
-                <span style={{ color: "var(--fgColor-attention)" }}>
-                  {Icons.flame}
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--fgColor-attention)" }}
-                >
-                  Complex functions
-                </span>
-                <span
-                  className="text-xs"
-                  style={{ color: "var(--fgColor-muted)" }}
-                >
-                  (10+ branches)
-                </span>
-              </div>
               <div className="space-y-2">
                 {complexityIssues.map((issue) => (
                   <div key={`${issue.file}:${issue.fn}`} className="text-sm">
                     <div className="flex items-center justify-between">
-                      <code
-                        className="text-xs font-medium"
-                        style={{ color: "var(--fgColor-default)" }}
-                      >
-                        {issue.fn}()
-                      </code>
+                      <code className="text-xs font-medium">{issue.fn}()</code>
                       <div className="flex items-center gap-2">
                         <span
                           className="text-xs"
-                          style={{
-                            color:
-                              issue.cc > issue.threshold
-                                ? "var(--fgColor-danger)"
-                                : "var(--fgColor-muted)",
-                          }}
+                          style={{ color: issue.cc > issue.threshold ? mesaColors.danger.fg : mesaColors.muted.fg }}
                         >
                           {issue.cc} branches
                         </span>
-                        <span
-                          className="text-xs px-1 py-0.5 rounded"
-                          style={{
-                            backgroundColor:
-                              issue.aiPercent > 50
-                                ? "var(--bgColor-severe-muted)"
-                                : "var(--bgColor-success-muted)",
-                            color:
-                              issue.aiPercent > 50
-                                ? "var(--fgColor-severe)"
-                                : "var(--fgColor-success)",
-                          }}
-                        >
-                          {issue.aiPercent > 50 ? "🤖 AI" : "👤 Human"}
-                        </span>
+                        <OriginBadge aiGenerated={issue.aiPercent > 50} />
                       </div>
                     </div>
-                    <div
-                      className="text-xs"
-                      style={{ color: "var(--fgColor-muted)" }}
-                    >
+                    <div className="text-xs" style={{ color: mesaColors.muted.fg }}>
                       {issue.file}:{issue.lines}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </AlertCard>
           )}
 
           {/* Over-Engineering Smell */}
           {overEngineering.abstractions > 0 && (
-            <div
-              className="p-3 rounded-md border"
-              style={{
-                backgroundColor: "var(--bgColor-attention-muted)",
-                borderColor: "var(--borderColor-attention-muted)",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <span style={{ color: "var(--fgColor-attention)" }}>
-                  {Icons.gear}
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--fgColor-attention)" }}
-                >
-                  Potential over-engineering
-                </span>
-              </div>
-              <div
-                className="text-xs mb-2"
-                style={{ color: "var(--fgColor-muted)" }}
-              >
-                {overEngineering.abstractions} new abstractions for{" "}
-                {overEngineering.codeLines} lines of code
+            <AlertCard icon={Icons.gear} title="Potential over-engineering" variant="attention">
+              <div className="text-xs mb-2" style={{ color: mesaColors.muted.fg }}>
+                {overEngineering.abstractions} new abstractions for {overEngineering.codeLines} lines of code
               </div>
               <div className="space-y-1">
                 {overEngineering.items.map((item) => (
-                  <div
-                    key={item.name}
-                    className="flex items-center justify-between text-xs"
-                  >
-                    <code
-                      className="px-1 py-0.5 rounded"
-                      style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                    >
-                      {item.name}
-                    </code>
-                    <span style={{ color: "var(--fgColor-muted)" }}>
-                      {item.type} · {item.lines} lines
-                    </span>
+                  <div key={item.name} className="flex items-center justify-between text-xs">
+                    <CodeSnippet>{item.name}</CodeSnippet>
+                    <span style={{ color: mesaColors.muted.fg }}>{item.type} · {item.lines} lines</span>
                   </div>
                 ))}
               </div>
-            </div>
+            </AlertCard>
           )}
 
           {/* Convention Drift */}
           {conventionDrift.length > 0 && (
-            <div
-              className="p-3 rounded-md border"
-              style={{
-                backgroundColor: "var(--bgColor-muted)",
-                borderColor: "var(--borderColor-default)",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <span style={{ color: "var(--fgColor-muted)" }}>
-                  {Icons.code}
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--fgColor-muted)" }}
-                >
-                  Style differs from codebase patterns
-                </span>
-              </div>
+            <AlertCard icon={Icons.code} title="Style differs from codebase patterns" variant="muted">
               <div className="space-y-2">
                 {conventionDrift.map((issue, i) => (
                   <div key={i} className="text-xs">
                     <div className="flex items-center gap-2">
                       <span
                         className="px-1 py-0.5 rounded uppercase"
-                        style={{
-                          backgroundColor: "var(--bgColor-neutral-muted)",
-                          color: "var(--fgColor-muted)",
-                          fontSize: "10px",
-                        }}
+                        style={{ backgroundColor: mesaColors.neutral.bg, color: mesaColors.muted.fg, fontSize: "10px" }}
                       >
                         {issue.type}
                       </span>
-                      <code style={{ color: "var(--fgColor-default)" }}>
-                        {issue.found}
-                      </code>
+                      <code>{issue.found}</code>
                     </div>
-                    <div
-                      className="mt-0.5 pl-1"
-                      style={{ color: "var(--fgColor-muted)" }}
-                    >
+                    <div className="mt-0.5 pl-1" style={{ color: mesaColors.muted.fg }}>
                       → existing pattern: {issue.expected}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
+            </AlertCard>
           )}
 
           {/* Error Handling Review */}
           {errorHandling.length > 0 && (
-            <div
-              className="p-3 rounded-md border"
-              style={{
-                backgroundColor: "var(--bgColor-attention-muted)",
-                borderColor: "var(--borderColor-attention-muted)",
-              }}
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <span style={{ color: "var(--fgColor-attention)" }}>
-                  {Icons.warning}
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "var(--fgColor-attention)" }}
-                >
-                  Error handling needs review
-                </span>
-              </div>
+            <AlertCard icon={Icons.warning} title="Error handling needs review" variant="attention">
               <div className="space-y-2">
                 {errorHandling.map((issue, i) => (
                   <div key={i} className="text-xs">
@@ -366,54 +182,25 @@ export function SummaryCard() {
                       <span
                         className="px-1 py-0.5 rounded"
                         style={{
-                          backgroundColor:
-                            issue.type === "empty-catch"
-                              ? "var(--bgColor-danger-muted)"
-                              : "var(--bgColor-attention-muted)",
-                          color:
-                            issue.type === "empty-catch"
-                              ? "var(--fgColor-danger)"
-                              : "var(--fgColor-attention)",
+                          backgroundColor: issue.type === "empty-catch" ? mesaColors.danger.bg : mesaColors.attention.bg,
+                          color: issue.type === "empty-catch" ? mesaColors.danger.fg : mesaColors.attention.fg,
                         }}
                       >
-                        {issue.type === "empty-catch" && "Empty catch"}
-                        {issue.type === "console-only" && "Console-only"}
-                        {issue.type === "broad-catch" && "Broad catch"}
-                        {issue.type === "missing-boundary" && "No boundary"}
+                        {errorTypeLabels[issue.type]}
                       </span>
-                      <span
-                        className="px-1 py-0.5 rounded"
-                        style={{
-                          backgroundColor: issue.aiGenerated
-                            ? "var(--bgColor-severe-muted)"
-                            : "var(--bgColor-success-muted)",
-                          color: issue.aiGenerated
-                            ? "var(--fgColor-severe)"
-                            : "var(--fgColor-success)",
-                        }}
-                      >
-                        {issue.aiGenerated ? "🤖 AI" : "👤 Human"}
-                      </span>
+                      <OriginBadge aiGenerated={issue.aiGenerated} />
                     </div>
-                    <div
-                      className="mt-1"
-                      style={{ color: "var(--fgColor-muted)" }}
-                    >
+                    <div className="mt-1" style={{ color: mesaColors.muted.fg }}>
                       {issue.file}:{issue.line}
                     </div>
-                    <code
-                      className="mt-1 block px-1 py-0.5 rounded"
-                      style={{ backgroundColor: "var(--bgColor-neutral-muted)" }}
-                    >
-                      {issue.code}
-                    </code>
+                    <CodeSnippet className="mt-1 block">{issue.code}</CodeSnippet>
                   </div>
                 ))}
               </div>
-            </div>
+            </AlertCard>
           )}
         </div>
       </div>
-    </div>
+    </MesaCard>
   );
 }
