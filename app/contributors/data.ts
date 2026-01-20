@@ -326,15 +326,15 @@ export const survivability = {
 };
 
 export const sidebarNav = [
-  { label: "Pulse", href: "/pulse" },
-  { label: "Contributors", href: "/contributors", active: true },
-  { label: "Community", href: "#" },
-  { label: "Traffic", href: "#" },
-  { label: "Commits", href: "#" },
-  { label: "Code frequency", href: "#" },
-  { label: "Dependency graph", href: "#" },
-  { label: "Network", href: "#" },
-  { label: "Forks", href: "#" },
+  { label: "Pulse", href: "/pulse", interactive: true },
+  { label: "Contributors", href: "/contributors", active: true, interactive: true },
+  { label: "Community", href: "#", interactive: false },
+  { label: "Traffic", href: "#", interactive: false },
+  { label: "Commits", href: "#", interactive: false },
+  { label: "Code frequency", href: "#", interactive: false },
+  { label: "Dependency graph", href: "#", interactive: false },
+  { label: "Network", href: "#", interactive: false },
+  { label: "Forks", href: "#", interactive: false },
 ];
 
 // Computed average AI percent

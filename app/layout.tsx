@@ -205,7 +205,7 @@ export default function RootLayout({
                 <MenuItem href="/issues" icon={Icons.issue} label="Issues" count={1} />
               </li>
               <li>
-                <MenuItem href="/pr" icon={Icons.pr} label="Pull requests" matchPrefix />
+                <MenuItem href="/pr" icon={Icons.pr} label="Pull requests" matchPrefix showPing />
               </li>
               <li>
                 <MenuItem href="/actions" icon={Icons.actions} label="Actions" />
@@ -214,7 +214,7 @@ export default function RootLayout({
                 <MenuItem href="/models" icon={Icons.models} label="Models" />
               </li>
               <li>
-                <MenuItem href="/pulse" icon={Icons.insights} label="Insights" matchPrefix />
+                <MenuItem href="/pulse" icon={Icons.insights} label="Insights" matchPrefix showPing />
               </li>
               <li>
                 <MenuItem

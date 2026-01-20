@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
+import { PingIndicator } from "@/components/mesa/ping-indicator";
 
 interface MenuItemProps {
   href: string;
@@ -10,9 +11,10 @@ interface MenuItemProps {
   label: string;
   count?: number;
   matchPrefix?: boolean;
+  showPing?: boolean;
 }
 
-export function MenuItem({ href, icon, label, count, matchPrefix = false }: MenuItemProps) {
+export function MenuItem({ href, icon, label, count, matchPrefix = false, showPing = false }: MenuItemProps) {
   const pathname = usePathname();
   const active = matchPrefix
     ? pathname.startsWith(href)
@@ -28,7 +30,10 @@ export function MenuItem({ href, icon, label, count, matchPrefix = false }: Menu
         borderColor: active ? "#f78166" : "transparent",
       }}
     >
-      <span style={{ color: "#848d97" }}>{icon}</span>
+      <span className="relative" style={{ color: "#848d97" }}>
+        {icon}
+        {showPing && <PingIndicator className="absolute -top-1 -right-1" />}
+      </span>
       {label}
       {count !== undefined && (
         <span

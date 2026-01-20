@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icons } from "../icons";
 import { sidebarNav, overview, activePRs } from "./data";
+import { PingIndicator } from "@/components/mesa/ping-indicator";
 
 export default function PulseLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +13,7 @@ export default function PulseLayout({ children }: { children: React.ReactNode })
             <Link
               key={item.label}
               href={item.href}
-              className="block px-3 py-2 text-sm rounded-md"
+              className="flex items-center gap-2 px-3 py-2 text-sm rounded-md"
               style={{
                 backgroundColor: item.active
                   ? "var(--bgColor-accent-muted)"
@@ -20,8 +21,10 @@ export default function PulseLayout({ children }: { children: React.ReactNode })
                 color: item.active
                   ? "var(--fgColor-accent)"
                   : "var(--fgColor-default)",
+                opacity: item.interactive ? 1 : 0.5,
               }}
             >
+              {item.interactive && <PingIndicator size="sm" />}
               {item.label}
             </Link>
           ))}

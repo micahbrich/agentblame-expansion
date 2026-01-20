@@ -3,6 +3,7 @@
 import { Icons } from "../icons";
 import { Contributor } from "./data";
 import { diff } from "@/components/mesa/primitives/colors";
+import { PingIndicator } from "@/components/mesa/ping-indicator";
 
 interface ContributorRowProps extends Contributor {
   isSelected?: boolean;
@@ -35,6 +36,9 @@ export function ContributorRow({
         borderColor: "var(--borderColor-default)",
       }}
     >
+      {/* Ping indicator */}
+      <PingIndicator size="sm" />
+
       {/* Avatar */}
       <img
         src={avatar}
