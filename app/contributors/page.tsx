@@ -49,18 +49,45 @@ export default function ContributorsPage() {
 
         {/* Content row */}
         <div className="flex flex-col lg:flex-row flex-1">
-          {/* Left: contributors list */}
+          {/* Left: contributors list with inline mobile expansion */}
           <div
             className="w-full lg:w-96 shrink-0 lg:border-r"
             style={{ borderColor: "var(--borderColor-default)" }}
           >
             {contributors.map((contributor) => (
-              <ContributorRow
-                key={contributor.username}
-                {...contributor}
-                isSelected={selected === contributor.username}
-                onClick={() => setSelected(contributor.username)}
-              />
+              <div key={contributor.username}>
+                <ContributorRow
+                  {...contributor}
+                  isSelected={selected === contributor.username}
+                  onClick={() => setSelected(contributor.username)}
+                />
+                {/* Mobile: inline fingerprint card below selected contributor */}
+                {selected === contributor.username && (
+                  <div className="lg:hidden">
+                    <div
+                      className="flex items-center gap-2 px-4 py-2 border-b text-xs font-medium"
+                      style={{
+                        backgroundColor: "var(--bgColor-muted)",
+                        color: "var(--fgColor-muted)",
+                        borderColor: "var(--borderColor-default)",
+                      }}
+                    >
+                      <MesaIcon size={16} />
+                      <span className="font-semibold">AI Fingerprint</span>
+                      <span>@{selected}</span>
+                      <div className="ml-auto">
+                        <PoweredBy />
+                      </div>
+                    </div>
+                    <div
+                      className="border-b"
+                      style={{ borderColor: "var(--borderColor-default)" }}
+                    >
+                      <FingerprintCard username={selected} embedded />
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
@@ -69,26 +96,6 @@ export default function ContributorsPage() {
             <FingerprintCard username={selected} embedded />
           </div>
         </div>
-      </div>
-
-      {/* Mobile: fingerprint card shown below contributor list */}
-      <div className="lg:hidden mt-4">
-        <div
-          className="flex items-center gap-2 px-4 py-2 border-b rounded-t-md text-xs font-medium"
-          style={{
-            backgroundColor: "var(--bgColor-muted)",
-            color: "var(--fgColor-muted)",
-            borderColor: "var(--borderColor-default)",
-          }}
-        >
-          <MesaIcon size={16} />
-          <span className="font-semibold">AI Fingerprint</span>
-          <span>@{selected}</span>
-          <div className="ml-auto">
-            <PoweredBy />
-          </div>
-        </div>
-        <FingerprintCard username={selected} />
       </div>
 
       {/* Survivability panel */}

@@ -213,8 +213,16 @@ export default function RootLayout({
               <li>
                 <MenuItem href="/models" icon={Icons.models} label="Models" />
               </li>
-              <li>
+              {/* Desktop: single Insights link */}
+              <li className="hidden md:block">
                 <MenuItem href="/pulse" icon={Icons.insights} label="Insights" matchPrefix showPing />
+              </li>
+              {/* Mobile: separate Pulse and Contributors links */}
+              <li className="md:hidden">
+                <MenuItem href="/pulse" icon={Icons.insights} label="Pulse" matchPrefix showPing />
+              </li>
+              <li className="md:hidden">
+                <MenuItem href="/contributors" icon={Icons.insights} label="Contributors" matchPrefix showPing />
               </li>
               <li>
                 <MenuItem
