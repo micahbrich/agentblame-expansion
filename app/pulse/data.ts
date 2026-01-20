@@ -58,15 +58,15 @@ export const overview = {
 };
 
 export const sidebarNav = [
-  { label: "Pulse", href: "/pulse", active: true },
-  { label: "Contributors", href: "/contributors" },
-  { label: "Community", href: "#" },
-  { label: "Traffic", href: "#" },
-  { label: "Commits", href: "#" },
-  { label: "Code frequency", href: "#" },
-  { label: "Dependency graph", href: "#" },
-  { label: "Network", href: "#" },
-  { label: "Forks", href: "#" },
+  { label: "Pulse", href: "/pulse", active: true, interactive: true },
+  { label: "Contributors", href: "/contributors", interactive: true },
+  { label: "Community", href: "#", interactive: false },
+  { label: "Traffic", href: "#", interactive: false },
+  { label: "Commits", href: "#", interactive: false },
+  { label: "Code frequency", href: "#", interactive: false },
+  { label: "Dependency graph", href: "#", interactive: false },
+  { label: "Network", href: "#", interactive: false },
+  { label: "Forks", href: "#", interactive: false },
 ];
 
 // Complementary Strengths Map - where different team members excel
