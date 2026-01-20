@@ -64,11 +64,31 @@ export default function ContributorsPage() {
             ))}
           </div>
 
-          {/* Right: fingerprint details */}
+          {/* Right: fingerprint details - desktop */}
           <div className="hidden lg:block flex-1 min-w-[500px]">
             <FingerprintCard username={selected} embedded />
           </div>
         </div>
+      </div>
+
+      {/* Mobile: fingerprint card shown below contributor list */}
+      <div className="lg:hidden mt-4">
+        <div
+          className="flex items-center gap-2 px-4 py-2 border-b rounded-t-md text-xs font-medium"
+          style={{
+            backgroundColor: "var(--bgColor-muted)",
+            color: "var(--fgColor-muted)",
+            borderColor: "var(--borderColor-default)",
+          }}
+        >
+          <MesaIcon size={16} />
+          <span className="font-semibold">AI Fingerprint</span>
+          <span>@{selected}</span>
+          <div className="ml-auto">
+            <PoweredBy />
+          </div>
+        </div>
+        <FingerprintCard username={selected} />
       </div>
 
       {/* Survivability panel */}

@@ -57,11 +57,11 @@ export function FingerprintCard({
 
   return (
     <MesaCard borderless={embedded}>
-      <div className="p-5 space-y-5">
+      <div className="p-4 md:p-5 space-y-4 md:space-y-5">
         {/* Hero: Stat block + Bar with legend */}
-        <div className="flex items-start gap-6">
+        <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
           {/* Left: Stat block with trend */}
-          <div className="shrink-0 border-r pr-6">
+          <div className="shrink-0 sm:border-r sm:pr-6">
             <div className="flex items-baseline">
               <span
                 className="text-base font-bold tracking-tight"
@@ -100,13 +100,13 @@ export function FingerprintCard({
         </div>
 
         {/* Heatmap + Quality stats side by side */}
-        <div className="flex gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           <Heatmap activity={activity} />
           <div
             className="p-3 rounded flex-1 space-y-3"
             style={{ backgroundColor: "var(--bgColor-muted)" }}
           >
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="text-center">
                 <div className="text-lg font-bold" style={{ color: "var(--fgColor-success)" }}>
                   {quality.survivability}%
@@ -155,7 +155,7 @@ export function FingerprintCard({
             </div>
             {sessions.length > 0 && (
               <div
-                className="pt-3 border-t flex items-center justify-center gap-3"
+                className="pt-3 border-t flex flex-wrap items-center justify-center gap-2 sm:gap-3"
                 style={{ borderColor: "var(--borderColor-muted)" }}
               >
                 <span className="text-[10px]" style={{ color: "var(--fgColor-muted)" }}>
@@ -164,7 +164,7 @@ export function FingerprintCard({
                 {sessions.slice(0, 3).map((s, i) => (
                   <span
                     key={i}
-                    className="text-[11px] px-2 py-1 rounded"
+                    className="text-[10px] sm:text-[11px] px-2 py-1 rounded"
                     style={{ backgroundColor: "var(--bgColor-default)" }}
                   >
                     {s.ago} · {s.tool} · <span style={{ color: "var(--fgColor-success)" }}>+{s.lines}</span>
@@ -176,7 +176,7 @@ export function FingerprintCard({
         </div>
 
         {/* 3-column breakdown */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <BreakdownColumn
             title="By File Type"
             items={byFileType.map(({ type, percent }) => ({ label: type, percent }))}

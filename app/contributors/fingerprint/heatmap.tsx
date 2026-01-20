@@ -42,7 +42,7 @@ export function Heatmap({ activity }: HeatmapProps) {
   };
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       <HeatmapCalendar
         data={data}
         rangeDays={90}

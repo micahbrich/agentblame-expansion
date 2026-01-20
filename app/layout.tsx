@@ -85,9 +85,9 @@ export default function RootLayout({
                 </Link>
               </div>
 
-              {/* Stars button */}
+              {/* Stars button - hidden on mobile */}
               <div
-                className="flex items-center border rounded-md text-xs"
+                className="hidden sm:flex items-center border rounded-md text-xs"
                 style={{ borderColor: "#30363d" }}
               >
                 <button
@@ -108,9 +108,9 @@ export default function RootLayout({
 
             {/* Right side */}
             <div className="flex items-center gap-2">
-              {/* Search bar */}
+              {/* Search bar - hidden on mobile */}
               <div
-                className="flex items-center gap-2 px-3 py-1.5 rounded-md border text-sm w-72"
+                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-md border text-sm w-72"
                 style={{
                   backgroundColor: "#010409",
                   borderColor: "#30363d",
@@ -127,41 +127,41 @@ export default function RootLayout({
                 </span>
               </div>
 
-              {/* Divider */}
+              {/* Divider - hidden on mobile */}
               <div
-                className="h-6 w-px mx-1"
+                className="hidden md:block h-6 w-px mx-1"
                 style={{ backgroundColor: "#21262d" }}
               />
 
-              {/* Header icons */}
+              {/* Header icons - simplified on mobile */}
               <div className="flex items-center gap-1">
                 <button
-                  className="p-2 rounded-md hover:bg-[#21262d]"
+                  className="hidden md:block p-2 rounded-md hover:bg-[#21262d]"
                   style={{ color: "#848d97" }}
                 >
                   {Icons.terminal}
                 </button>
                 <button
-                  className="p-2 rounded-md hover:bg-[#21262d]"
+                  className="hidden md:block p-2 rounded-md hover:bg-[#21262d]"
                   style={{ color: "#848d97" }}
                 >
                   {Icons.copilot}
                 </button>
                 <button
-                  className="flex items-center p-2 rounded-md hover:bg-[#21262d]"
+                  className="hidden md:flex items-center p-2 rounded-md hover:bg-[#21262d]"
                   style={{ color: "#f0f6fc" }}
                 >
                   {Icons.plus}
                   {Icons.triangle}
                 </button>
                 <button
-                  className="p-2 rounded-md hover:bg-[#21262d]"
+                  className="hidden md:block p-2 rounded-md hover:bg-[#21262d]"
                   style={{ color: "#848d97" }}
                 >
                   {Icons.issue}
                 </button>
                 <button
-                  className="p-2 rounded-md hover:bg-[#21262d]"
+                  className="hidden md:block p-2 rounded-md hover:bg-[#21262d]"
                   style={{ color: "#848d97" }}
                 >
                   {Icons.pr}
@@ -192,12 +192,12 @@ export default function RootLayout({
             </div>
           </header>
 
-          {/* Repo nav */}
+          {/* Repo nav - horizontally scrollable on mobile */}
           <nav
-            className="px-4 border-b"
+            className="px-4 border-b overflow-x-auto"
             style={{ backgroundColor: "#010409", borderColor: "#21262d" }}
           >
-            <ul className="flex gap-0 text-sm">
+            <ul className="flex gap-0 text-sm min-w-max">
               <li>
                 <MenuItem href="/" icon={Icons.code} label="Code" />
               </li>
