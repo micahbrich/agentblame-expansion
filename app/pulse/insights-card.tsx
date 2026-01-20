@@ -197,7 +197,7 @@ export function InsightsCard() {
   ].join(" • ");
 
   return (
-    <MesaCard margin="mx-6 my-6">
+    <MesaCard margin="mx-4 md:mx-6 my-4 md:my-6">
       <MesaCardHeader title="Team AI Insights" />
 
       <div className="p-4">

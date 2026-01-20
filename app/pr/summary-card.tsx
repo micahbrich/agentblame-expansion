@@ -38,7 +38,7 @@ export function SummaryCard() {
 
       <div className="p-4 space-y-4">
         {/* Stats row */}
-        <div className="flex gap-6">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           {/* AI vs Human breakdown */}
           <div className="flex-1">
             <SectionTitle>Line Attribution</SectionTitle>
@@ -64,7 +64,7 @@ export function SummaryCard() {
         </div>
 
         {/* Alerts grid */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {/* Security files */}
           {securityFiles.length > 0 && (
             <AlertCard icon={Icons.warning} title="Security-sensitive files modified" variant="attention">

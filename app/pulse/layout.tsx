@@ -5,9 +5,9 @@ import { PingIndicator } from "@/components/mesa/ping-indicator";
 
 export default function PulseLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="px-6 py-4 flex gap-6">
-      {/* Sidebar */}
-      <aside className="w-56 shrink-0">
+    <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row gap-4 md:gap-6">
+      {/* Sidebar - hidden on mobile */}
+      <aside className="hidden md:block w-56 shrink-0">
         <nav className="space-y-1">
           {sidebarNav.map((item) => (
             <Link
@@ -32,7 +32,7 @@ export default function PulseLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main content */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold">Pulse</h2>
           <select
@@ -89,7 +89,7 @@ export default function PulseLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Agentblame AI Card slot */}
-        <div className="-mx-6">{children}</div>
+        <div className="-mx-4 md:-mx-6">{children}</div>
 
         {/* Active PRs */}
         <div className="mt-6">

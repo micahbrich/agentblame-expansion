@@ -34,7 +34,7 @@ export function SurvivabilityCard() {
 
       <div className="p-4 space-y-4">
         {/* Main survival chart */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <SectionTitle className="mb-3">Code Fate Distribution</SectionTitle>
             <div className="h-32">

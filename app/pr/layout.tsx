@@ -11,18 +11,18 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
     <>
       {/* PR Header Section */}
       <div
-        className="px-6 py-4"
+        className="px-4 md:px-6 py-4"
         style={{ backgroundColor: "var(--bgColor-default)" }}
       >
         {/* Top row: Title + right side buttons */}
-        <div className="flex items-start justify-between mb-3">
-          <h1 className="text-2xl font-normal pr-4">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+          <h1 className="text-xl md:text-2xl font-normal">
             <span style={{ color: "var(--fgColor-default)" }}>{pr.title}</span>{" "}
             <span style={{ color: "var(--fgColor-muted)" }}>#{pr.number}</span>
           </h1>
 
-          {/* Right side buttons */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Right side buttons - hidden on mobile */}
+          <div className="hidden sm:flex items-center gap-2 shrink-0">
             <span
               className="text-sm px-2 py-1 rounded-md"
               style={{
@@ -103,10 +103,10 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
 
       {/* PR Tabs */}
       <div
-        className="px-6 border-b"
+        className="px-4 md:px-6 border-b overflow-x-auto"
         style={{ borderColor: "var(--borderColor-muted)" }}
       >
-        <nav className="flex items-center justify-between">
+        <nav className="flex items-center justify-between min-w-max">
           <div className="flex gap-1">
             {[
               { icon: Icons.comment, label: "Conversation", count: 0 },
@@ -156,7 +156,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
 
       {/* Diff Toolbar */}
       <div
-        className="flex items-center justify-between px-4 py-2 border-b"
+        className="flex items-center justify-between px-4 py-2 border-b overflow-x-auto"
         style={{
           backgroundColor: "var(--bgColor-muted)",
           borderColor: "var(--borderColor-muted)",
@@ -164,13 +164,13 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center gap-2">
           <button
-            className="p-1.5 rounded hover:bg-[var(--bgColor-default)]"
+            className="hidden md:block p-1.5 rounded hover:bg-[var(--bgColor-default)]"
             style={{ color: "var(--fgColor-muted)" }}
           >
             {Icons.sidebar}
           </button>
           <button
-            className="flex items-center gap-1 px-2 py-1 text-sm rounded-md border"
+            className="hidden sm:flex items-center gap-1 px-2 py-1 text-sm rounded-md border"
             style={{
               backgroundColor: "var(--bgColor-default)",
               borderColor: "var(--borderColor-default)",
@@ -187,7 +187,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-sm" style={{ color: "var(--fgColor-muted)" }}>
+          <span className="hidden sm:inline-flex items-center gap-1 text-sm" style={{ color: "var(--fgColor-muted)" }}>
             <span
               className="inline-flex w-4 h-4 rounded-full border-2"
               style={{ borderColor: "var(--borderColor-default)" }}
@@ -195,13 +195,13 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
             0 / {totalFiles} viewed
           </span>
           <button
-            className="p-1.5 rounded hover:bg-[var(--bgColor-default)]"
+            className="hidden sm:block p-1.5 rounded hover:bg-[var(--bgColor-default)]"
             style={{ color: "var(--fgColor-muted)" }}
           >
             {Icons.copy}
           </button>
           <button
-            className="flex items-center gap-1 p-1.5 rounded hover:bg-[var(--bgColor-default)]"
+            className="hidden md:flex items-center gap-1 p-1.5 rounded hover:bg-[var(--bgColor-default)]"
             style={{ color: "var(--fgColor-muted)" }}
           >
             {Icons.comment}
@@ -209,7 +209,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
             <span className="text-sm">0</span>
           </button>
           <button
-            className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-md"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap"
             style={{ backgroundColor: "#238636", color: "#ffffff" }}
           >
             Submit comments{Icons.triangle}
@@ -225,9 +225,9 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main content with file tree sidebar */}
       <div className="flex">
-        {/* File tree sidebar */}
+        {/* File tree sidebar - hidden on mobile */}
         <div
-          className="w-72 border-r shrink-0 p-3"
+          className="hidden lg:block w-72 border-r shrink-0 p-3"
           style={{
             borderColor: "var(--borderColor-muted)",
             backgroundColor: "var(--bgColor-default)",
@@ -298,7 +298,7 @@ export default function PRLayout({ children }: { children: React.ReactNode }) {
         </div>
 
         {/* Diff content */}
-        <div className="flex-1 p-4 space-y-4">
+        <div className="flex-1 p-2 md:p-4 space-y-4 overflow-x-auto">
           {files.map((file) => {
             const fileStats = getFileStats(file);
             return (

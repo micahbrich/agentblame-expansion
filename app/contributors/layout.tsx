@@ -9,9 +9,9 @@ export default function ContributorsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="px-6 py-4 flex gap-6">
-      {/* Sidebar */}
-      <aside className="w-56 shrink-0">
+    <div className="px-4 md:px-6 py-4 flex flex-col md:flex-row gap-4 md:gap-6">
+      {/* Sidebar - hidden on mobile */}
+      <aside className="hidden md:block w-56 shrink-0">
         <nav className="space-y-1">
           {sidebarNav.map((item) => (
             <Link
@@ -36,8 +36,8 @@ export default function ContributorsLayout({
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="flex-1 space-y-4 md:space-y-6 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <h2 className="text-xl font-semibold">Contributors</h2>
           <div className="flex items-center gap-2 text-sm">
             <span style={{ color: "var(--fgColor-muted)" }}>
